@@ -1,0 +1,15 @@
+<div class="walkthrough-background" ng-class="{'walkthrough-active': isActive}" ng-click="onCloseClicked($event)" on-touch="onCloseTouched($event)">
+    <div class="walkthrough-transclude" ng-transclude></div>
+    <div class="walkthrough-non-transclude-template" ng-show="!hasTransclude">
+        <pre class="walkthrough-element walkthrough-text" ng-bind="mainCaption">
+        </pre>
+        <img class="walkthrough-element walkthrough-icon" ng-if="icon!='arrow'" ng-src="{{walkthroughIcon}}" alt="icon">
+        <div class="walkthrough-element walkthrough-arrow" ng-if="icon=='arrow'"></div>
+        <button class="walkthrough-element walkthrough-button-positive walkthrough-done-button" type="button" ng-if="useButton" ng-click="onCloseClicked($event)" on-touch="onCloseTouched($event)">
+            {{buttonCaption}}
+        </button>
+    </div>
+    <!-- Always show as this gives us the gray background -->
+    <div class="walkthrough-hole" ng-class="{'walkthrough-hole-round': isRound}">
+    </div>
+</div>

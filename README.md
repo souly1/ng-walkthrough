@@ -24,7 +24,8 @@ Classic, Classic with arrow and Totally customizable respectively:
 
 # Demo
 
-Coming Soon!
+A demo was created to show the 2 basic overlay types in 3 demoes fitting the screenshot examples -  one basic template, one with arrows, and the last freestyle one using transclude.
+[Demo can be found here](http://plnkr.co/edit/kHM9zHCxAA3gPYvedmdw?p=preview)
 
 ## Requirements
 

@@ -226,7 +226,6 @@ angular.module('ng-walkthrough', [])
                 scope.walkthroughTextElement = angular.element(element[0].querySelector(DOM_WALKTHROUGH_TEXT_CLASS));
                 scope.walkthroughIconElement = angular.element(element[0].querySelector(DOM_WALKTHROUGH_ICON_CLASS));
                 scope.walkthroughArrowElement = angular.element(element[0].querySelector(DOM_WALKTHROUGH_ARROW_CLASS));
-
                 $transclude(function(clone){
                     init(scope);
                     var transcludeContent = clone.text().trim();

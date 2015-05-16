@@ -13,6 +13,7 @@
     opacity:0;
     height: 0;
     overflow: hidden;
+    z-index: 1000;
 }
 
 .walkthrough-hole {
@@ -20,10 +21,6 @@
     -moz-box-shadow: 0 0 0 1997px rgba(0, 0, 0, .8);
     -webkit-box-shadow: 0 0 0 1997px rgba(0, 0, 0, .8);
     box-shadow: 0 0 0 1997px rgba(0, 0, 0, .8);
-}
-
-.walkthrough-hole.walkthrough-hole-round {
-    border-radius: 200px;
 }
 
 .walkthrough-element.walkthrough-text{
@@ -74,7 +71,7 @@
 }
 
 .walkthrough-element{
-    z-index: 1000;
+    z-index: 1001;
     position:relative;
     margin-left: auto;
     margin-right: auto;
@@ -91,5 +88,5 @@
 
 .walkthrough-transclude{
     position: relative;
-    z-index: 1000;
+    z-index: 1001;
 }

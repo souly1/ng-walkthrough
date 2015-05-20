@@ -82,6 +82,7 @@
     -moz-transition: opacity .2s ease-out;
     -o-transition: opacity .2s ease-out;
     transition: opacity .2s ease-out;
+
     opacity:1;
     height: 100%;
 }

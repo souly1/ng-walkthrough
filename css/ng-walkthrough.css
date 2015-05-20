@@ -90,3 +90,7 @@
     position: relative;
     z-index: 1001;
 }
+
+.walkthrough-hole-round{
+    border-radius: 200px;
+}

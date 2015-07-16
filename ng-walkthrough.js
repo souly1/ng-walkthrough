@@ -89,9 +89,9 @@ angular.module('ng-walkthrough', [])
                             if (($event.currentTarget.className.indexOf(DOM_WALKTHROUGH_BACKGROUND_CLASS) > -1 && !scope.useButton) ||
                                 ($event.currentTarget.className.indexOf(DOM_WALKTHROUGH_DONE_BUTTON_CLASS) > -1 && scope.useButton)) {
                                 scope.closeWalkthrough();
+                                $event.stopPropagation();
                             }
                         }
-                        $event.stopPropagation();
                     };
 
                     scope.onCloseTouched = function($event) {
@@ -99,9 +99,9 @@ angular.module('ng-walkthrough', [])
                             if (($event.currentTarget.className.indexOf(DOM_WALKTHROUGH_BACKGROUND_CLASS) > -1 && !scope.useButton) ||
                                 ($event.currentTarget.className.indexOf(DOM_WALKTHROUGH_DONE_BUTTON_CLASS) > -1 && scope.useButton)) {
                                 scope.closeWalkthrough();
+                                $event.stopPropagation();
                             }
                         }
-                        $event.stopPropagation();
                     };
                     scope.closeIcon = iconsUrl + "Hotspot-close.png";
                     scope.walkthroughIcon = getIcon(scope.icon);

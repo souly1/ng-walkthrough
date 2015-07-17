@@ -27,6 +27,7 @@ angular.module('ng-walkthrough', [])
                 icon: '@',
                 focusElementId: '@',
                 mainCaption: '@',
+                captionOnBottom: '=',
                 isRound: '=',
                 useButton: '=',
                 iconPaddingLeft: '@',
@@ -151,7 +152,7 @@ angular.module('ng-walkthrough', [])
                     var iconBottom = iconTopWithPadding + iconHeight;
 
                     //Check if text overlaps icon, if does, move it to bottom
-                    if (isItemOnText(iconLeftWithPadding, iconTopWithPadding, iconRight, iconBottom)){
+                    if (scope.captionOnBottom || isItemOnText(iconLeftWithPadding, iconTopWithPadding, iconRight, iconBottom)){
                         moveTextToBottom(iconBottom);
                     }
 
@@ -180,7 +181,7 @@ angular.module('ng-walkthrough', [])
                     }
 
                     //Check if text overlaps icon, if does, move it to bottom
-                    if (isItemOnText(startLeft, startTop, endLeft, endTop)){
+                    if (scope.captionOnBottom || isItemOnText(startLeft, startTop, endLeft, endTop)){
                         moveTextToBottom(startTop);
                     }
 

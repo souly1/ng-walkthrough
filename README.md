@@ -129,6 +129,7 @@ and use one of the two configurations:
 - `tip-color` (optional) - For tip walkthrough. Define the tip textbox background color. Currently supports "BLACK" or "WHITE" values
 - `onWalkthroughShow` (optional) - Any walkthrough type. Bind method to be called when walkthrough is displayed
 - `onWalkthroughHide` (optional) - Any walkthrough type. Bind method to be called when walkthrough is hidden
+- `caption-on-bottom` (optional) - Forces the caption to be displayed on the bottom of the screen.
 
 ## Testing
 

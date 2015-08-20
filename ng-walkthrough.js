@@ -204,6 +204,14 @@ angular.module('ng-walkthrough', [])
                         var height = angularElement[0].offsetHeight;
                         var left = angularElement[0].offsetLeft;
                         var top = angularElement[0].offsetTop;
+                        var parent = angularElement[0].offsetParent;
+
+                        while (parent) {
+                            left = left + parent.offsetLeft;
+                            top = top  + parent.offsetTop;
+
+                            parent = parent.offsetParent;
+                        }
                         setFocus(left, top, width, height);
                         var paddingLeft = parseFloat(iconPaddingLeft);
                         var paddingTop = parseFloat(iconPaddingTop);

@@ -2,12 +2,12 @@
 
 # ng-walkthrough
 
-After not finding a walkthrough/on-boarding/tour guide/learning page directive which was responsive, dynamic, easy to use and thus good for our [Fitness Meal Planner](http://www.fitnessmealplanner.com) mobile web App I decided to create one.
+After not finding an Angular walkthrough/on-boarding/tour guide/learning page directive which was responsive, dynamic, easy to use and thus good for our [Fitness Meal Planner](http://www.fitnessmealplanner.com) mobile web App I decided to create one.
 
 One of the most common design challenges emerging in mobile design is that of 'invitation' - creating an explanation walk through during user first interaction with the app so to engage him.
 Following Theresa Neil's design patterns from [Mobile Design Pattern Gallery] (http://www.amazon.com/gp/product/1449314325/ref=as_li_ss_tl?ie=UTF8&tag=uxbo09-20&linkCode=as2&camp=217145&creative=399373&creativeASIN=1449314325)
 
-This directive implements a walkthrough via one of the following patterns: the transparency pattern or the tip pattern (an explanation about the different patterns can be found online at [ux booth](http://www.uxbooth.com/articles/mobile-design-patterns/))
+This angular directive implements a walkthrough via one of the following patterns: the transparency pattern or the tip pattern (an explanation about the different patterns can be found online at [ux booth](http://www.uxbooth.com/articles/mobile-design-patterns/))
 
 # Special features
  - Use the transparency walkthrough either using transclude or given attributes which contain basics such as text, gesture image, 'got it' button

@@ -67,6 +67,7 @@ module.exports = function(config) {
     autoWatch: false,
 
     plugins : [
+      'karma-chrome-launcher',
       'karma-firefox-launcher',
       'karma-jasmine',
       'karma-ng-html2js-preprocessor'

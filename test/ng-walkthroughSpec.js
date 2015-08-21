@@ -164,7 +164,7 @@ describe('ng-walkthrough Directive', function() {
         window.setTimeout(function () {
             expect(walkthroughText[0].innerText).toBe(expectedText);
             done();
-        }, 100);
+        }, 1000);
     });
 
     it("Should create highlight/focus on element with the given DOM id set in attribute 'focus-element-id'", function(){
@@ -292,7 +292,7 @@ describe('ng-walkthrough Directive', function() {
         window.setTimeout(function () {
             expect(displayedIcon[0].offsetTop).toBe(Math.round(expectedIconTopOffset));
             done();
-        }, 100);
+        }, 1000);
     });
 
     it("Should add left and top padding to icon selected in 'icon' attribute with attribute values 'icon-padding-left' and 'icon-padding-top'", function(done){
@@ -476,7 +476,7 @@ describe('ng-walkthrough Directive', function() {
         window.setTimeout(function () {
             expect(displayedIcon[0].offsetTop + displayedIcon[0].offsetHeight).toBeLessThan(walkthroughCaption[0].offsetTop);
             done();
-        }, 100);
+        }, 1000);
     });
 
     it("Should use transcluded html if exists and disable rest of the predefined html", function(){

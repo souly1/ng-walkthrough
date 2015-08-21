@@ -25,7 +25,7 @@ Transparency walkthrough in Classic, Classic with arrow mode and Totally customi
 
 Tip walkthrough mode:
 
-![alt tag](/screenshots/screenshot4.png)
+![alt tag](/screenshots/screenshotTip4.png)
 
 # Demo
 

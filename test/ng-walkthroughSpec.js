@@ -11,6 +11,11 @@ describe('ng-walkthrough Directive', function() {
     // Load the myApp module, which contains the directive
     beforeEach(module('ng-walkthrough', 'ng-walkthrough.html'));
 
+    //For the new Jasmine 2.0
+    beforeEach(function(done) {
+        done();
+    });
+
     // Store references to $rootScope and $compile
     // so they are available to all tests in this describe block
     beforeEach(inject(function(_$compile_, _$rootScope_, _$timeout_, _$httpBackend_, $templateCache){
@@ -99,6 +104,7 @@ describe('ng-walkthrough Directive', function() {
     it("Should close the walkthrough upon click on close button when attribute 'use-button' set to 'true'", function(){
         //Arrange
         setFixtures('<walkthrough' +
+        ' walkthrough-type="transparency"' +
         ' is-active="isActive"' +
         ' use-button=true>' +
         '</walkthrough>');
@@ -138,11 +144,12 @@ describe('ng-walkthrough Directive', function() {
     });
 
     //Test fails in Firefox => Travis
-    it("Should display the text from attribute 'main-caption'", function(){
+    it("Should display the text from attribute 'main-caption'", function(done){
         //Arrange
         var expectedText = "mocked walk-through text";
         setFixtures('<walkthrough' +
         ' is-active="isActive"' +
+        ' walkthrough-type="transparency"' +
         ' main-caption="{{caption}}">' +
         '</walkthrough>');
         $compile($("body"))($scope);
@@ -156,6 +163,7 @@ describe('ng-walkthrough Directive', function() {
         //Assert
         window.setTimeout(function () {
             expect(walkthroughText[0].innerText).toBe(expectedText);
+            done();
         }, 100);
     });
 
@@ -171,6 +179,7 @@ describe('ng-walkthrough Directive', function() {
         var mockedFocusItemId = "mockedFocusItem";
         setFixtures('<walkthrough' +
         ' is-active="isActive"' +
+        ' walkthrough-type="transparency"' +
         ' focus-element-id="' + mockedFocusItemId + '">' +
         '</walkthrough>');
 
@@ -246,7 +255,7 @@ describe('ng-walkthrough Directive', function() {
         testIconLoadedWithExpectedImage("swipe_up", "/icons/Swipe_Up.png");
     });
 
-    it("Should display icon on focus element given it is set by 'focus-element-id'", function(){
+    it("Should display icon on focus element given it is set by 'focus-element-id'", function(done){
         //Arrange
         var iconWanted = "single_tap";
         var walkthroughIconDOM = ".walkthrough-icon";
@@ -258,6 +267,7 @@ describe('ng-walkthrough Directive', function() {
 
         setFixtures('<walkthrough' +
         ' is-active="isActive"' +
+        ' walkthrough-type="transparency"' +
         ' focus-element-id="' + mockedFocusItemId + '"' +
         ' icon="' + iconWanted + '">' +
         '</walkthrough>');
@@ -281,10 +291,11 @@ describe('ng-walkthrough Directive', function() {
         //Timeout or fails in Firefox => Travis
         window.setTimeout(function () {
             expect(displayedIcon[0].offsetTop).toBe(Math.round(expectedIconTopOffset));
+            done();
         }, 100);
     });
 
-    it("Should add left and top padding to icon selected in 'icon' attribute with attribute values 'icon-padding-left' and 'icon-padding-top'", function(){
+    it("Should add left and top padding to icon selected in 'icon' attribute with attribute values 'icon-padding-left' and 'icon-padding-top'", function(done){
         //Arrange
         var iconWanted = "single_tap";
         var walkthroughIconDOM = ".walkthrough-icon";
@@ -298,6 +309,7 @@ describe('ng-walkthrough Directive', function() {
 
         setFixtures('<walkthrough' +
         ' is-active="isActive"' +
+        ' walkthrough-type="transparency"' +
         ' focus-element-id="' + mockedFocusItemId + '"' +
         ' icon-padding-left="' + paddingLeft + '"' +
         ' icon-padding-top="' + paddingTop + '"' +
@@ -323,6 +335,7 @@ describe('ng-walkthrough Directive', function() {
         //Timeout for fails in Firefox => Travis
         window.setTimeout(function () {
             expect(displayedIcon[0].offsetTop).toBe(Math.round(expectedIconTopOffset));
+            done();
         }, 100);
     });
 
@@ -338,6 +351,7 @@ describe('ng-walkthrough Directive', function() {
 
         setFixtures('<walkthrough' +
         ' is-active="isActive"' +
+        ' walkthrough-type="transparency"' +
         ' focus-element-id="' + mockedFocusItemId + '"' +
         ' icon="' + arrowIcon + '">' +
         '</walkthrough>');
@@ -372,6 +386,7 @@ describe('ng-walkthrough Directive', function() {
         var mockedFocusItemId = "mockedFocusItem";
 
         setFixtures('<walkthrough' +
+                        ' walkthrough-type="transparency"' +
                         ' is-active="isActive"' +
                         ' icon="' + iconWanted + '">' +
                     '</walkthrough>');
@@ -427,7 +442,7 @@ describe('ng-walkthrough Directive', function() {
         expect($scope.onWalkthroughHide).toHaveBeenCalled();
     });
 
-    it("Should move text down if walkthrough image overlapping with it", function(){
+    it("Should move text down if walkthrough image overlapping with it", function(done){
         //Arrange
         var iconWanted = "single_tap";
         var walkthroughIconDOM = ".walkthrough-icon";
@@ -439,6 +454,7 @@ describe('ng-walkthrough Directive', function() {
         var mockedCaption = "mockedCaption";
         setFixtures('<walkthrough' +
         ' is-active="isActive"' +
+        ' walkthrough-type="transparency"' +
         ' focus-element-id="' + mockedFocusItemId + '"' +
         ' main-caption="' + mockedCaption + '"' +
         ' icon="' + iconWanted + '">' +
@@ -459,12 +475,14 @@ describe('ng-walkthrough Directive', function() {
         //Timeout for  fails in Firefox => Travis
         window.setTimeout(function () {
             expect(displayedIcon[0].offsetTop + displayedIcon[0].offsetHeight).toBeLessThan(walkthroughCaption[0].offsetTop);
+            done();
         }, 100);
     });
 
     it("Should use transcluded html if exists and disable rest of the predefined html", function(){
         //Arrange
         setFixtures('<walkthrough' +
+        ' walkthrough-type="transparency"' +
         ' is-active="isActive">' +
         '<div id="new-transluded-data">transcluded data</div>' +
         '</walkthrough>');
@@ -480,5 +498,162 @@ describe('ng-walkthrough Directive', function() {
         //Assert
         expect(walkthroughTransclude).toExist();
         expect(walkthroughNonTransclude).not.toBeVisible();
+    });
+
+    it("Should display tip walkthrough text box without any icon", function(){
+        //Arrange
+        var mockedCaption = "mockedCaption";
+        setFixtures('<walkthrough' +
+        ' is-active="isActive"' +
+        ' walkthrough-type="tip"' +
+        ' main-caption="' + mockedCaption + '">' +
+        '</walkthrough>');
+        $compile($("body"))($scope);
+        $scope.$digest();
+
+        //Act
+        $scope.isActive = true;
+        $scope.$digest();
+
+        var walkthroughTipTextBox = $('.walkthrough-tip-text-box');
+
+        //Assert
+        expect(walkthroughTipTextBox[0]).toBeVisible();
+    });
+
+    it("Should display tip walkthrough text box with white text on black background", function(){
+        //Arrange
+        var mockedCaption = "mockedCaption";
+        setFixtures('<walkthrough' +
+        ' is-active="isActive"' +
+        ' walkthrough-type="tip"' +
+        ' tip-color="BLACK"' +
+        ' main-caption="' + mockedCaption + '">' +
+        '</walkthrough>');
+        $compile($("body"))($scope);
+        $scope.$digest();
+
+        //Act
+        $scope.isActive = true;
+        $scope.$digest();
+
+        var walkthroughTipTextBox = $('.walkthrough-tip-text-box-color-black');
+
+        //Assert
+        expect(walkthroughTipTextBox[0]).toExist();
+    });
+
+    it("Should display tip walkthrough text box with white text on white background", function(){
+        //Arrange
+        var mockedCaption = "mockedCaption";
+        setFixtures('<walkthrough' +
+        ' is-active="isActive"' +
+        ' walkthrough-type="tip"' +
+        ' tip-color="WHITE"' +
+        ' main-caption="' + mockedCaption + '">' +
+        '</walkthrough>');
+        $compile($("body"))($scope);
+        $scope.$digest();
+
+        //Act
+        $scope.isActive = true;
+        $scope.$digest();
+
+        var walkthroughTipTextBox = $('.walkthrough-tip-text-box-color-white');
+
+        //Assert
+        expect(walkthroughTipTextBox[0]).toExist();
+    });
+
+    it("Should display tip walkthrough text box at bottom part of screen", function(){
+        //Arrange
+        var mockedCaption = "mockedCaption";
+        setFixtures('<walkthrough' +
+        ' is-active="isActive"' +
+        ' walkthrough-type="tip"' +
+        ' tip-location="BOTTOM"' +
+        ' main-caption="' + mockedCaption + '">' +
+        '</walkthrough>');
+        $compile($("body"))($scope);
+        $scope.$digest();
+
+        //Act
+        $scope.isActive = true;
+        $scope.$digest();
+
+        var walkthroughTipTextBox = $('.walkthrough-tip-bottom');
+
+        //Assert
+        expect(walkthroughTipTextBox[0]).toExist();
+    });
+
+    it("Should display tip walkthrough text box at top part of screen", function(){
+        //Arrange
+        var mockedCaption = "mockedCaption";
+        setFixtures('<walkthrough' +
+        ' is-active="isActive"' +
+        ' walkthrough-type="tip"' +
+        ' tip-location="TOP"' +
+        ' main-caption="' + mockedCaption + '">' +
+        '</walkthrough>');
+        $compile($("body"))($scope);
+        $scope.$digest();
+
+        //Act
+        $scope.isActive = true;
+        $scope.$digest();
+
+        var walkthroughTipTextBox = $('.walkthrough-tip-top');
+
+        //Assert
+        expect(walkthroughTipTextBox[0]).toExist();
+    });
+
+    it("Should display tip walkthrough text box with icon on top of it", function(){
+        //Arrange
+        var mockedCaption = "mockedCaption";
+        var iconWanted = "single_tap";
+        setFixtures('<walkthrough' +
+        ' is-active="isActive"' +
+        ' icon="' + iconWanted + '"' +
+        ' walkthrough-type="tip"' +
+        ' tip-icon-location="FRONT"' +
+        ' main-caption="' + mockedCaption + '">' +
+        '</walkthrough>');
+        $compile($("body"))($scope);
+        $scope.$digest();
+
+        //Act
+        $scope.isActive = true;
+        $scope.$digest();
+
+        var walkthroughTipTextBoxIcon = $('.walkthrough-tip-icon-image-front');
+
+        //Assert
+        expect(walkthroughTipTextBoxIcon[0]).toExist();
+    });
+
+    it("Should display tip walkthrough text box with icon behind it", function(){
+        //Arrange
+        var mockedCaption = "mockedCaption";
+        var iconWanted = "single_tap";
+        setFixtures('<walkthrough' +
+        ' is-active="isActive"' +
+        ' icon="' + iconWanted + '"' +
+        ' walkthrough-type="tip"' +
+        ' tip-icon-location="BACK"' +
+        ' main-caption="' + mockedCaption + '">' +
+        '</walkthrough>');
+        $compile($("body"))($scope);
+        $scope.$digest();
+
+        //Act
+        $scope.isActive = true;
+        $scope.$digest();
+
+        var walkthroughTipTextBoxIcon = $('.walkthrough-tip-icon-image-back');
+
+        //Assert
+        expect(walkthroughTipTextBoxIcon[0]).toExist();
     });
 });

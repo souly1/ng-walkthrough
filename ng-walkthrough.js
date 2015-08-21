@@ -7,7 +7,8 @@ angular.module('ng-walkthrough', [])
     .directive("walkthrough", function($log, $timeout) {
         var DOM_WALKTHROUGH_TEXT_CLASS = ".walkthrough-text";
         var DOM_WALKTHROUGH_HOLE_CLASS = ".walkthrough-hole";
-        var DOM_WALKTHROUGH_ICON_CLASS = ".walkthrough-icon";
+        var DOM_WALKTHROUGH_TRANSPARENCY_ICON_CLASS = ".walkthrough-icon";
+        var DOM_WALKTHROUGH_TIP_ICON_CLASS = ".walkthrough-tip-icon-text-box";
         var DOM_WALKTHROUGH_ARROW_CLASS = ".walkthrough-arrow";
         var DOM_WALKTHROUGH_BACKGROUND_CLASS = "walkthrough-background";
         var DOM_WALKTHROUGH_DONE_BUTTON_CLASS = "walkthrough-done-button";
@@ -20,6 +21,7 @@ angular.module('ng-walkthrough', [])
             restrict: 'E',
             transclude: true,
             scope: {
+                walkthroughType: '@',
                 isActive: '=',
                 icon: '@',
                 focusElementId: '@',
@@ -28,6 +30,9 @@ angular.module('ng-walkthrough', [])
                 useButton: '=',
                 iconPaddingLeft: '@',
                 iconPaddingTop: '@',
+                tipLocation: '@',
+                tipIconLocation: '@',
+                tipColor: '@',
                 onWalkthroughShow: '&',
                 onWalkthroughHide: '&'
             },
@@ -97,7 +102,7 @@ angular.module('ng-walkthrough', [])
                         }
                         $event.stopPropagation();
                     };
-
+                    scope.closeIcon = iconsUrl + "Hotspot-close.png";
                     scope.walkthroughIcon = getIcon(scope.icon);
                     scope.buttonCaption = BUTTON_CAPTION_DONE;
                 };
@@ -195,6 +200,17 @@ angular.module('ng-walkthrough', [])
                     scope.walkthroughArrowElement.append(arrowSvgDom);
                 };
 
+                var setTipIconPadding = function(iconPaddingLeft, iconPaddingTop){
+                    var iconLocation = "";
+                    if (iconPaddingTop){
+                        iconLocation += "margin-top:" + iconPaddingTop + "px;";
+                    }
+                    if (iconPaddingLeft){
+                        iconLocation += "right:" + iconPaddingLeft + "%;";
+                    }
+                    scope.walkthroughIconElement.attr('style', iconLocation);
+                };
+
                 //Attempts to highlight the given element ID and set Icon to it if exists, if not use default - right under text
                 var setElementLocations = function(walkthroughIconWanted, focusElementId, iconPaddingLeft, iconPaddingTop){
                     var focusElement = document.querySelector('#' + focusElementId);
@@ -226,13 +242,23 @@ angular.module('ng-walkthrough', [])
                             setArrowAndText(left, top + paddingTop, width, height, paddingLeft);
                         }
                     } else {
-                        $log.info('Unable to find element requested to be focused: #' + focusElementId);
+                        if (focusElementId) {
+                            $log.info('Unable to find element requested to be focused: #' + focusElementId);
+                        } else{
+                            //if tip mode with icon that we want to set padding to, set it
+                            if (scope.walkthroughType== "tip" &&
+                                walkthroughIconWanted && walkthroughIconWanted.length > 0 &&
+                                (iconPaddingLeft || iconPaddingTop)){
+                                setTipIconPadding(iconPaddingLeft, iconPaddingTop);
+                            }
+                        }
                     }
                 };
 
                 scope.walkthroughHoleElement = angular.element(element[0].querySelector(DOM_WALKTHROUGH_HOLE_CLASS));
                 scope.walkthroughTextElement = angular.element(element[0].querySelector(DOM_WALKTHROUGH_TEXT_CLASS));
-                scope.walkthroughIconElement = angular.element(element[0].querySelector(DOM_WALKTHROUGH_ICON_CLASS));
+                var iconClass = (scope.walkthroughType== "tip")? DOM_WALKTHROUGH_TIP_ICON_CLASS: DOM_WALKTHROUGH_TRANSPARENCY_ICON_CLASS;
+                scope.walkthroughIconElement = angular.element(element[0].querySelector(iconClass));
                 scope.walkthroughArrowElement = angular.element(element[0].querySelector(DOM_WALKTHROUGH_ARROW_CLASS));
                 $transclude(function(clone){
                     init(scope);

@@ -5,7 +5,8 @@ var iconsUrl = currentScriptPath.replace(new RegExp("ng-walkthrough.js.*"), 'ico
 
 angular.module('ng-walkthrough', [])
     .directive("walkthrough", function($log, $timeout) {
-        var DOM_WALKTHROUGH_TEXT_CLASS = ".walkthrough-text";
+        var DOM_WALKTHROUGH_TRANSPARENCY_TEXT_CLASS = ".walkthrough-text";
+        var DOM_WALKTHROUGH_TIP_TEXT_CLASS = ".walkthrough-tip-text-box";
         var DOM_WALKTHROUGH_HOLE_CLASS = ".walkthrough-hole";
         var DOM_WALKTHROUGH_TRANSPARENCY_ICON_CLASS = ".walkthrough-icon";
         var DOM_WALKTHROUGH_TIP_ICON_CLASS = ".walkthrough-tip-icon-text-box";
@@ -256,7 +257,8 @@ angular.module('ng-walkthrough', [])
                 };
 
                 scope.walkthroughHoleElement = angular.element(element[0].querySelector(DOM_WALKTHROUGH_HOLE_CLASS));
-                scope.walkthroughTextElement = angular.element(element[0].querySelector(DOM_WALKTHROUGH_TEXT_CLASS));
+                var textClass = (scope.walkthroughType== "tip")? DOM_WALKTHROUGH_TIP_TEXT_CLASS: DOM_WALKTHROUGH_TRANSPARENCY_TEXT_CLASS;
+                scope.walkthroughTextElement = angular.element(element[0].querySelector(textClass));
                 var iconClass = (scope.walkthroughType== "tip")? DOM_WALKTHROUGH_TIP_ICON_CLASS: DOM_WALKTHROUGH_TRANSPARENCY_ICON_CLASS;
                 scope.walkthroughIconElement = angular.element(element[0].querySelector(iconClass));
                 scope.walkthroughArrowElement = angular.element(element[0].querySelector(DOM_WALKTHROUGH_ARROW_CLASS));

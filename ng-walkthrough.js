@@ -237,7 +237,7 @@ angular.module('ng-walkthrough', [])
                         if (!paddingTop) { paddingTop = 0;}
 
                         //If Gesture icon given bind it to hole as well
-                        if (gestureIcons.indexOf(walkthroughIconWanted) > -1){
+                        if (walkthroughIconWanted && walkthroughIconWanted != "arrow"){
                             setIconAndText(left + width/2, top  + height/2, paddingLeft, paddingTop);
                         }
                         if (walkthroughIconWanted == "arrow"){

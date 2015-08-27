@@ -190,6 +190,7 @@ describe('ng-walkthrough Directive', function() {
         //Act
         $scope.isActive = true;
         $timeout.flush();
+        $timeout.flush();
         var walkthroughFocusedItem = angular.element($("#"+mockedFocusItemId));
         var walkthroughFocusedHole = angular.element($(walkthroughHole));
 
@@ -278,6 +279,7 @@ describe('ng-walkthrough Directive', function() {
         //Act
         $scope.isActive = true;
         $timeout.flush();
+        $timeout.flush();
         var displayedIcon = angular.element($(walkthroughIconDOM));
         var walkthroughFocusedItem = angular.element($("#"+mockedFocusItemId));
 
@@ -322,6 +324,7 @@ describe('ng-walkthrough Directive', function() {
         //Act
         $scope.isActive = true;
         $timeout.flush();
+        $timeout.flush();
         var displayedIcon = angular.element($(walkthroughIconDOM));
         var walkthroughFocusedItem = angular.element($("#"+mockedFocusItemId));
 
@@ -361,6 +364,7 @@ describe('ng-walkthrough Directive', function() {
 
         //Act
         $scope.isActive = true;
+        $timeout.flush();
         $timeout.flush();
         var displayedArrow = angular.element($(walkthroughArrowDOM));
         var walkthroughFocusedItem = angular.element($("#"+mockedFocusItemId));
@@ -465,6 +469,7 @@ describe('ng-walkthrough Directive', function() {
 
         //Act
         $scope.isActive = true;
+        $timeout.flush();
         $timeout.flush();
         var displayedIcon = angular.element($(walkthroughIconDOM));
         var walkthroughCaption = angular.element(".walkthrough-text");
@@ -655,5 +660,28 @@ describe('ng-walkthrough Directive', function() {
 
         //Assert
         expect(walkthroughTipTextBoxIcon[0]).toExist();
+    });
+
+    //TODO: Need to implement tests for isBindClickEventToBody attribute
+    xit("Should close walkthrough even when clicking outside it, and should add/remove its event listeners only when it's displayed", function(){
+        //Arrange
+        var mockedCaption = "mockedCaption";
+        var iconWanted = "single_tap";
+        setFixtures('<walkthrough' +
+        ' is-active="isActive"' +
+        ' icon="' + iconWanted + '"' +
+        ' is-bind-click-event-to-body' +
+        ' walkthrough-type="transparency"' +
+        ' main-caption="' + mockedCaption + '">' +
+        '</walkthrough>');
+        $compile($("body"))($scope);
+        $scope.$digest();
+
+        //Act
+        $scope.isActive = true;
+        $scope.$digest();
+
+        //Assert
+        expect(true).toBe(false);
     });
 });

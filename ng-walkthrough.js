@@ -345,9 +345,6 @@ angular.module('ng-walkthrough', [])
                             bindClickEvents();
                         }
                         if (!scope.hasTransclude){
-                            angular.element($window).bind('resize', function() {
-                              setElementLocations(scope.icon, attrs.focusElementId, scope.iconPaddingLeft, scope.iconPaddingTop)
-                            });
                             //Must timeout to make sure we have final correct coordinates after screen totally load
                             $timeout(function() {scope.setFocusOnElement(attrs.focusElementId);},100);
                         }

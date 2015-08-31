@@ -4,7 +4,7 @@ var templateUrl = currentScriptPath.replace(new RegExp("ng-walkthrough.js.*"), '
 var iconsUrl = currentScriptPath.replace(new RegExp("ng-walkthrough.js.*"), 'icons/');
 
 angular.module('ng-walkthrough', [])
-    .directive("walkthrough", function($log, $timeout) {
+    .directive("walkthrough", function($log, $timeout, $window) {
         var CONST_IONIC_HEADER_SIZE = 43;//px
 
         var DOM_WALKTHROUGH_TRANSPARENCY_TEXT_CLASS = ".walkthrough-text";
@@ -328,6 +328,9 @@ angular.module('ng-walkthrough', [])
                             bindClickEvents();
                         }
                         if (!scope.hasTransclude){
+                            angular.element($window).bind('resize', function() {
+                              setElementLocations(scope.icon, attrs.focusElementId, scope.iconPaddingLeft, scope.iconPaddingTop)
+                            });
                             //Must timeout to make sure we have final correct coordinates after screen totally load
                             $timeout(function() {setElementLocations(scope.icon, attrs.focusElementId, scope.iconPaddingLeft, scope.iconPaddingTop)},100);
                         }

@@ -4,7 +4,7 @@ var templateUrl = currentScriptPath.replace(new RegExp("ng-walkthrough.js.*"), '
 var iconsUrl = currentScriptPath.replace(new RegExp("ng-walkthrough.js.*"), 'icons/');
 
 angular.module('ng-walkthrough', [])
-    .directive("walkthrough", function($log, $timeout) {
+    .directive("walkthrough", function($log, $timeout, $window) {
         var CONST_IONIC_HEADER_SIZE = 43;//px
 
         var DOM_WALKTHROUGH_TRANSPARENCY_TEXT_CLASS = ".walkthrough-text";
@@ -98,6 +98,10 @@ angular.module('ng-walkthrough', [])
                     }
                 };
 
+                var resizeHandler = function(){
+                    scope.setFocusOnElement(attrs.focusElementId);
+                };
+
                 var unbindClickEvents = function(){
                     angular.element(document.body).off('mousedown', clickFunction);
                     angular.element(document.body).off('mouseup', clickFunction);
@@ -112,6 +116,14 @@ angular.module('ng-walkthrough', [])
                         angular.element(document.body).on('click', clickFunction);
                         angular.element(document.body).on('touch', touchFunction);
                     }, 1000);
+                };
+
+                var bindScreenResize = function(){
+                        angular.element($window).on('resize', resizeHandler);
+                };
+
+                var unbindScreenResize = function(){
+                    angular.element(document.body).off('resize', resizeHandler);
                 };
 
                 var init = function(scope){
@@ -308,6 +320,10 @@ angular.module('ng-walkthrough', [])
                     }
                 };
 
+                scope.setFocusOnElement = function(focusElementId){
+                    setElementLocations(scope.icon, focusElementId, scope.iconPaddingLeft, scope.iconPaddingTop);
+                };
+
                 scope.walkthroughHoleElement = angular.element(element[0].querySelector(DOM_WALKTHROUGH_HOLE_CLASS));
                 var textClass = (scope.walkthroughType== "tip")? DOM_WALKTHROUGH_TIP_TEXT_CLASS: DOM_WALKTHROUGH_TRANSPARENCY_TEXT_CLASS;
                 scope.walkthroughTextElement = angular.element(element[0].querySelector(textClass));
@@ -324,14 +340,17 @@ angular.module('ng-walkthrough', [])
 
                 scope.$watch('isActive', function(newValue){
                     if(newValue){
+                        bindScreenResize();
                         if (scope.isBindClickEventToBody){
                             bindClickEvents();
                         }
                         if (!scope.hasTransclude){
                             //Must timeout to make sure we have final correct coordinates after screen totally load
-                            $timeout(function() {setElementLocations(scope.icon, attrs.focusElementId, scope.iconPaddingLeft, scope.iconPaddingTop)},100);
+                            $timeout(function() {scope.setFocusOnElement(attrs.focusElementId);},100);
                         }
                         scope.onWalkthroughShow();
+                    } else{
+                        unbindScreenResize();
                     }
                 });
             },

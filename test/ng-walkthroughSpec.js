@@ -662,6 +662,52 @@ describe('ng-walkthrough Directive', function() {
         expect(walkthroughTipTextBoxIcon[0]).toExist();
     });
 
+    it("Should update hole location in 'transparency' walkthrough when screen resizes", function(done) {
+        //Arrange
+        var walkthroughHole = ".walkthrough-hole";
+        var mockedFocusItemId = "mockedFocusItem";
+        var mockedCaption = "mockedCaption";
+        var iconWanted = "single_tap";
+        var marginLeft = 50;
+        var width = 150;
+        var height = 150;
+        var padding = 5;
+        var expectedFocusOnElementCalls = 1;
+
+        setFixtures('<walkthrough' +
+        ' id="walkthrough"' +
+        ' is-active="isActive"' +
+        ' icon="' + iconWanted + '"' +
+        ' focus-element-id="' + mockedFocusItemId + '"' +
+        ' walkthrough-type="transparency"' +
+        ' main-caption="' + mockedCaption + '">' +
+        '</walkthrough>');
+        jasmine.getFixtures().appendSet("<div id='" + mockedFocusItemId  + "' style='margin-left:" + marginLeft + "px;width:" + width + "px;background-color:green;height:" + height + "px;display: inline-block;'></div>");
+
+        $compile($("body"))($scope);
+        $scope.$digest();
+        $scope.isActive = true;
+        $scope.$digest();
+        $timeout.flush();
+        var callCount = 0;
+        var directiveScope = angular.element('body').find('#walkthrough').isolateScope();
+        spyOn(directiveScope, 'setFocusOnElement').and.callFake(function() {
+            callCount++;
+        });
+        expect(callCount).toBe(0);
+
+        $(window).on('resize', function(){
+            //Assert
+            expect(callCount).toBe(expectedFocusOnElementCalls);
+            done();
+        });
+
+        //Act
+        $(window).resize();
+        $scope.isMoved = true;
+        $scope.$digest();
+    });
+
     //TODO: Need to implement tests for isBindClickEventToBody attribute
     xit("Should close walkthrough even when clicking outside it, and should add/remove its event listeners only when it's displayed", function(){
         //Arrange

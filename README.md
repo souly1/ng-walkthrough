@@ -118,7 +118,8 @@ and use one of the two configurations:
 - `is-active` (mandatory) - Any walkthrough type. Bound element controls display the directive. Set 'true' to bound element in order to display.
 - `walkthrough-type` (mandatory) - Any walkthrough type. Specifies what type of walkthrough to display. Currently supported are 'transparency' and 'tip' types
 - `focus-element-id` (optional) - Any walkthrough type. ID of DOM element we want to give focus to, without it all screen will be grayed out
-- `is-round` (optional) - For transparency walkthrough. Set to 'true' if you want the focused area to be round, otherwise it will be square set to the size of the DOM element
+- `is-round` (optional) - Any walkthrough type. Set to 'true' if you want the focused area to be round, otherwise it will be square set to the size of the DOM element
+- `has-glow` (optional) - Any walkthrough type. Set to 'true' if you want the focused area to have a glow around it
 - `icon` (optional) - Any walkthrough type. If set to any of the predefined values ("single_tap", "double_tap", "swipe_down", "swipe_left", "swipe_right", "swipe_up"), in such case the image will be bound to focus element (if exists). if giving any other icon then is not bound to focus element
 - `main-caption` (optional) - Any walkthrough type. This is the text that will be displayed in the walk-through. Text can be formatted
 - `use-button` (optional) - Any walkthrough type. set to 'true' you want a button displayed that most be clicked in order to close walkthrough, otherwise clicking anywhere while walkthrough displayed will close it

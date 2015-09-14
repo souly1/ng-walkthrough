@@ -10,9 +10,6 @@
                 {{buttonCaption}}
             </button>
         </div>
-        <!-- Always show as this gives us the gray background -->
-        <div class="walkthrough-hole" ng-class="{'walkthrough-hole-round': isRound}">
-        </div>
     </div>
     <div ng-show="walkthroughType=='tip'" ng-class="{'walkthrough-tip-top': tipLocation=='TOP', 'walkthrough-tip-bottom': tipLocation=='BOTTOM'}">
         <img class="walkthrough-element walkthrough-tip-icon-text-box" ng-class="{'walkthrough-tip-icon-image-front': tipIconLocation=='FRONT', 'walkthrough-tip-icon-image-back': tipIconLocation=='BACK'}" ng-show="icon!='arrow'" ng-src="{{icon}}" alt="icon">
@@ -21,5 +18,10 @@
         </button>
         <pre class="walkthrough-element walkthrough-tip-text-box" ng-class="{'walkthrough-tip-text-box-color-black': tipColor=='BLACK', 'walkthrough-tip-text-box-color-white': tipColor=='WHITE'}" ng-bind="mainCaption">
         </pre>
+    </div>
+    <!-- Always show as this gives us the gray background -->
+    <div class="walkthrough-hole" ng-class="{'walkthrough-hole-round': isRound}">
+    </div>
+    <div ng-show="hasGlow" class="walkthrough-hole walkthrough-hole-glow" ng-class="{'walkthrough-hole-round': isRound}">
     </div>
 </div>

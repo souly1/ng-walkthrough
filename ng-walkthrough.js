@@ -30,6 +30,7 @@ angular.module('ng-walkthrough', [])
                 focusElementId: '@',
                 mainCaption: '@',
                 isRound: '=',
+                hasGlow: '=',
                 useButton: '=',
                 iconPaddingLeft: '@',
                 iconPaddingTop: '@',
@@ -172,7 +173,7 @@ angular.module('ng-walkthrough', [])
                         "top:" + (top - PADDING_HOLE) + "px;" +
                         "width:" + (width + (2 * PADDING_HOLE)) + "px;" +
                         "height:" + (height + (2 * PADDING_HOLE)) + "px;";
-                    scope.walkthroughHoleElement.attr('style', holeDimensions);
+                    scope.walkthroughHoleElements.attr('style', holeDimensions);
                 };
 
                 var moveTextToBottom = function(newTop){
@@ -306,6 +307,12 @@ angular.module('ng-walkthrough', [])
                         if (walkthroughIconWanted == "arrow"){
                             setArrowAndText(left, top + paddingTop, width, height, paddingLeft);
                         }
+                        //if tip mode with icon that we want to set padding to, set it
+                        if (scope.walkthroughType== "tip" &&
+                            walkthroughIconWanted && walkthroughIconWanted.length > 0 &&
+                            (iconPaddingLeft || iconPaddingTop)){
+                            setTipIconPadding(iconPaddingLeft, iconPaddingTop);
+                        }
                     } else {
                         if (focusElementId) {
                             $log.info('Unable to find element requested to be focused: #' + focusElementId);
@@ -324,7 +331,8 @@ angular.module('ng-walkthrough', [])
                     setElementLocations(scope.icon, focusElementId, scope.iconPaddingLeft, scope.iconPaddingTop);
                 };
 
-                scope.walkthroughHoleElement = angular.element(element[0].querySelector(DOM_WALKTHROUGH_HOLE_CLASS));
+                var holeElements = element[0].querySelectorAll(DOM_WALKTHROUGH_HOLE_CLASS);
+                scope.walkthroughHoleElements = angular.element(holeElements);
                 var textClass = (scope.walkthroughType== "tip")? DOM_WALKTHROUGH_TIP_TEXT_CLASS: DOM_WALKTHROUGH_TRANSPARENCY_TEXT_CLASS;
                 scope.walkthroughTextElement = angular.element(element[0].querySelector(textClass));
                 var iconClass = (scope.walkthroughType== "tip")? DOM_WALKTHROUGH_TIP_ICON_CLASS: DOM_WALKTHROUGH_TRANSPARENCY_ICON_CLASS;
@@ -345,6 +353,7 @@ angular.module('ng-walkthrough', [])
                             bindClickEvents();
                         }
                         if (!scope.hasTransclude){
+                            scope.setFocusOnElement(attrs.focusElementId);
                             //Must timeout to make sure we have final correct coordinates after screen totally load
                             $timeout(function() {scope.setFocusOnElement(attrs.focusElementId);},100);
                         }

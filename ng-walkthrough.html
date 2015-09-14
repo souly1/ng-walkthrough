@@ -20,8 +20,8 @@
         </pre>
     </div>
     <!-- Always show as this gives us the gray background -->
-    <div class="walkthrough-hole" ng-class="{'walkthrough-hole-round': isRound}">
+    <div ng-show="walkthroughType=='transparency' || focusElementId" class="walkthrough-hole" ng-class="{'walkthrough-hole-round': isRound}">
     </div>
-    <div ng-show="hasGlow" class="walkthrough-hole walkthrough-hole-glow" ng-class="{'walkthrough-hole-round': isRound}">
+    <div ng-show="hasGlow && focusElementId" class="walkthrough-hole walkthrough-hole-glow" ng-class="{'walkthrough-hole-round': isRound}">
     </div>
 </div>

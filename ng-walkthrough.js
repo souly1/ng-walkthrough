@@ -4,9 +4,7 @@ var templateUrl = currentScriptPath.replace(new RegExp("ng-walkthrough.js.*"), '
 var iconsUrl = currentScriptPath.replace(new RegExp("ng-walkthrough.js.*"), 'icons/');
 
 angular.module('ng-walkthrough', [])
-    .directive("walkthrough", function($log, $timeout, $window) {
-        var CONST_IONIC_HEADER_SIZE = 43;//px
-
+    .directive("walkthrough", function($log, $timeout, $window, $injector) {
         var DOM_WALKTHROUGH_TRANSPARENCY_TEXT_CLASS = ".walkthrough-text";
         var DOM_WALKTHROUGH_TIP_TEXT_CLASS = ".walkthrough-tip-text-box";
         var DOM_WALKTHROUGH_HOLE_CLASS = ".walkthrough-hole";
@@ -19,6 +17,7 @@ angular.module('ng-walkthrough', [])
         var PADDING_HOLE = 5;
         var PADDING_ARROW_START = 5;
         var gestureIcons = ["single_tap", "double_tap", "swipe_down", "swipe_left", "swipe_right", "swipe_up"];
+        var hasIonic = false;
 
         return {
             restrict: 'E',
@@ -128,9 +127,16 @@ angular.module('ng-walkthrough', [])
                 };
 
                 var init = function(scope){
+                    try {
+                        var ionic = $injector.get("$ionicPosition");
+                        hasIonic = true;
+                    } catch(err) {
+                        hasIonic = false;
+                    }
+
                     scope.clickEvent = 'click';
                     //noinspection JSUnresolvedVariable
-                    if (typeof ionic !== 'undefined') { //Might need to comment this out if fails build on angular only machine
+                    if (hasIonic) { //Might need to comment this out if fails build on angular only machine
                         scope.clickEvent = 'touch';
                     }
 
@@ -144,6 +150,11 @@ angular.module('ng-walkthrough', [])
                     scope.onCloseClicked = function($event) {
                         //if Angular only
                         if (scope.clickEvent == 'click') {
+                            if ((!scope.useButton) ||
+                                ($event.currentTarget.className.indexOf(DOM_WALKTHROUGH_DONE_BUTTON_CLASS) > -1)) {
+                                scope.closeWalkthrough();
+                            }
+                        } else if (scope.clickEvent == 'touch') { //We need this in case both angular an ionic are for some reason loaded
                             if ((!scope.useButton) ||
                                 ($event.currentTarget.className.indexOf(DOM_WALKTHROUGH_DONE_BUTTON_CLASS) > -1)) {
                                 scope.closeWalkthrough();
@@ -185,11 +196,12 @@ angular.module('ng-walkthrough', [])
 
                 //Check if given icon covers text
                 var isItemOnText = function(iconLeft, iconTop, iconRight, iconBottom) {
+                    var offsetCoordinates = getOffsetCoordinates(scope.walkthroughTextElement);
                     var retval = false;
-                    var textLeft = scope.walkthroughTextElement[0].offsetLeft;
-                    var textRight = scope.walkthroughTextElement[0].offsetLeft + scope.walkthroughTextElement[0].offsetWidth;
-                    var textTop = scope.walkthroughTextElement[0].offsetTop;
-                    var textBottom = scope.walkthroughTextElement[0].offsetTop + scope.walkthroughTextElement[0].offsetHeight;
+                    var textLeft = offsetCoordinates.left;
+                    var textRight = offsetCoordinates.left + offsetCoordinates.width;
+                    var textTop = offsetCoordinates.top;
+                    var textBottom = offsetCoordinates.top + offsetCoordinates.height;
                     if (!(textRight < iconLeft ||
                         textLeft > iconRight ||
                         textBottom < iconTop ||
@@ -201,8 +213,9 @@ angular.module('ng-walkthrough', [])
 
                 //Sets the icon displayed according to directive argument
                 var setIconAndText = function(iconLeft, iconTop, paddingLeft, paddingTop){
-                    var iconHeight = scope.walkthroughIconElement[0].offsetHeight;
-                    var iconWidth = scope.walkthroughIconElement[0].offsetWidth;
+                    var offsetCoordinates = getOffsetCoordinates(scope.walkthroughIconElement);
+                    var iconHeight = offsetCoordinates.height;
+                    var iconWidth = offsetCoordinates.width;
                     var iconLeftWithPadding = iconLeft + paddingLeft;
                     var iconTopWithPadding = iconTop + paddingTop;
                     var iconRight = iconLeftWithPadding + iconWidth;
@@ -223,8 +236,9 @@ angular.module('ng-walkthrough', [])
                 };
 
                 var setArrowAndText = function(pointSubjectLeft, pointSubjectTop, pointSubjectWidth, pointSubjectHeight, paddingLeft){
-                    var startLeft = scope.walkthroughTextElement[0].offsetLeft + scope.walkthroughTextElement[0].offsetWidth /2;
-                    var startTop = scope.walkthroughTextElement[0].offsetTop + scope.walkthroughTextElement[0].offsetHeight + PADDING_ARROW_START;
+                    var offsetCoordinates = getOffsetCoordinates(scope.walkthroughTextElement);
+                    var startLeft = offsetCoordinates.left + offsetCoordinates.width /2;
+                    var startTop = offsetCoordinates.top + offsetCoordinates.height + PADDING_ARROW_START;
 
                     var endTop = 0;
                     var endLeft = 0;
@@ -270,29 +284,45 @@ angular.module('ng-walkthrough', [])
                     scope.walkthroughIconElement.attr('style', iconLocation);
                 };
 
+                var getOffsetCoordinates = function(focusElement){
+                    var width;
+                    var height;
+                    var left;
+                    var top;
+                    if (hasIonic) { //Might need to comment this out if fails build on angular only machine
+                        var $ionicPosition = $injector.get('$ionicPosition');
+                        var ionicElement = $ionicPosition.offset(focusElement);
+                        width = ionicElement.width;
+                        height = ionicElement.height;
+                        left = ionicElement.left;
+                        top = ionicElement.top;
+                    } else {
+                        width = focusElement[0].offsetWidth;
+                        height = focusElement[0].offsetHeight;
+                        left = focusElement[0].offsetLeft;
+                        top = focusElement[0].offsetTop;
+                        var parent = focusElement[0].offsetParent;
+
+                        while (parent) {
+                            left = left + parent.offsetLeft;
+                            top = top + parent.offsetTop;
+                            parent = parent.offsetParent;
+                        }
+                    }
+                    return { top:top, left: left, height: height, width: width};
+                };
+
                 //Attempts to highlight the given element ID and set Icon to it if exists, if not use default - right under text
                 var setElementLocations = function(walkthroughIconWanted, focusElementId, iconPaddingLeft, iconPaddingTop){
                     var focusElement = document.querySelector('#' + focusElementId);
                     var angularElement = angular.element(focusElement);
                     if (angularElement.length > 0) {
-                        var width = angularElement[0].offsetWidth;
-                        var height = angularElement[0].offsetHeight;
-                        var left = angularElement[0].offsetLeft;
-                        var top = angularElement[0].offsetTop;
-                        var parent = angularElement[0].offsetParent;
 
-                        while (parent) {
-                            left = left + parent.offsetLeft;
-                            top = top  + parent.offsetTop;
-
-                            //In case we place walkthrough in ion-content with class "has-header" , we need to subtract it
-                            //As our new 'viewport' is without it
-                            if (parent.nodeName.toLowerCase().indexOf('ion-content') >= 0 &&
-                                parent.className.toLowerCase().indexOf('has-header') >=0){
-                                top -= CONST_IONIC_HEADER_SIZE;
-                            }
-                            parent = parent.offsetParent;
-                        }
+                        var offsetCoordinates = getOffsetCoordinates(angularElement);
+                        var width = offsetCoordinates.width;
+                        var height = offsetCoordinates.height;
+                        var left = offsetCoordinates.left;
+                        var top = offsetCoordinates.top;
 
                         setFocus(left, top, width, height);
                         var paddingLeft = parseFloat(iconPaddingLeft);

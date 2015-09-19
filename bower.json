@@ -20,7 +20,7 @@
     "angular-animate": "1.4.3",
     "angular-route": "1.4.3",
     "angular-sanitize": "1.4.3",
-    "angular-ui-router": "~0.2.15",
+    "angular-ui-router": "0.2.13",
     "ionic": "~1.1.0"
   },
   "resolutions": {

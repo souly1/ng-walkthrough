@@ -23,6 +23,9 @@
     "angular-ui-router": "~0.2.15",
     "ionic": "~1.1.0"
   },
+  "resolutions": {
+    "angular": "1.4.3"
+  }
   "keywords": [
     "angularjs",
     "directive",

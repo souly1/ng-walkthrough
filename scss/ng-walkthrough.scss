@@ -1,4 +1,39 @@
-// transition
+/* ===========================
+   Style
+   =========================== */
+
+@charset "UTF-8";
+
+@mixin transition($transition...) {
+    -moz-transition:    $transition;
+    -o-transition:      $transition;
+    -webkit-transition: $transition;
+    transition:         $transition;
+}
+@mixin transition-property($property...) {
+    -moz-transition-property:    $property;
+    -o-transition-property:      $property;
+    -webkit-transition-property: $property;
+    transition-property:         $property;
+}
+@mixin transition-duration($duration...) {
+    -moz-transition-property:    $duration;
+    -o-transition-property:      $duration;
+    -webkit-transition-property: $duration;
+    transition-property:         $duration;
+}
+@mixin transition-timing-function($timing...) {
+    -moz-transition-timing-function:    $timing;
+    -o-transition-timing-function:      $timing;
+    -webkit-transition-timing-function: $timing;
+    transition-timing-function:         $timing;
+}
+@mixin transition-delay($delay...) {
+    -moz-transition-delay:    $delay;
+    -o-transition-delay:      $delay;
+    -webkit-transition-delay: $delay;
+    transition-delay:         $delay;
+}
 
 @mixin box-shadow ($box-shadow) {
   -moz-box-shadow: $box-shadow;
@@ -6,6 +41,9 @@
   box-shadow: $box-shadow;
 }
 
+// Color
+
+$color-line : #FFF;
 
 .walkthrough-hole-glow {
     position: absolute;
@@ -24,13 +62,13 @@
     right:0;
     background-color: initial;
     text-align: center;
-    @include transition ('height 0s ease-out .2s, opacity .2s ease-out');
+    @include transition (height 0s ease-out .2s, opacity .2s ease-out);
     opacity:0;
     height: 0;
     overflow: hidden;
     z-index: 1000;
     &.walkthrough-active{
-      @include transition ('opacity .2s ease-out;');
+      @include transition (opacity .2s ease-out);
         opacity:1;
         height: 100%;
     }
@@ -38,7 +76,7 @@
 
 .walkthrough-hole {
     position: absolute;
-    @include box-shadow ('0 0 0 1997px rgba(0, 0, 0, .8)');
+    @include box-shadow (0 0 0 1997px rgba(0, 0, 0, .8));
     -webkit-appearance: none;
 }
 
@@ -50,7 +88,7 @@
   &.walkthrough-text{
       margin-top: 10%;
       width: 70%;
-      color: #fff;
+      color: $color-line;
       text-align: center;
   }
   &.walkthrough-done-button{
@@ -66,7 +104,7 @@
       height: 200px;
   }
   &.walkthrough-arrow{
-      color: #ffffff;
+      color: $color-line;
       position: absolute;
       top: 0;
       left: 0;
@@ -78,9 +116,9 @@
 .walkthrough-button-positive{
     border-color: #0c63ee;
     background-color: #387ef5;
-    color: #fff;
+    color: $color-line;
     &:hover {
-        color: #fff;
+        color: $color-line;
         text-decoration: none;
     }
     &.active {
@@ -152,12 +190,12 @@
 }
 
 .walkthrough-tip-text-box-color-black {
-    border-color: #ffffff;
+    border-color: $color-line;
     background-color: #000000;
-    color: #ffffff;
+    color: $color-line;
 }
 
 .walkthrough-tip-text-box-color-white {
     border-color: #000000;
-    background-color: #ffffff;  
+    background-color: $color-line;
 }

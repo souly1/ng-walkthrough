@@ -1,0 +1,19 @@
+# Specifies intentionally untracked files to ignore when using Git
+# http://git-scm.com/docs/gitignore
+
+node_modules/
+bower_components/
+.settings/
+.DS_Store
+*.swp
+*.swo
+.tern-project
+
+# ctags info to to navigate projects quickly by jumping to function definitions from anywhere in code.
+tags
+
+# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio
+*.iml
+
+## Directory-based project format:
+.idea/

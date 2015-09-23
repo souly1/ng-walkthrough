@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html ng-app="myApp"></html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title>AngularJS Walk-through Directive</title>
+    <link href="style.css" rel="stylesheet"/>
+    <link href="../css/ng-walkthrough.css" rel="stylesheet" />
+    <script src="../bower_components/angular/angular.min.js"></script>
+    <script src="../ng-walkthrough.js"></script>
+    <script src="app.js"></script>
+</head>
+<body ng-controller="MainCtrl">
+<div id="container">
+    <button type="button" ng-click="onClick(1)">Show Transparency Classic Demo</button>
+    <button type="button" ng-click="onClick(2)">Show Transparency Classic With Arrow Demo</button>
+    <button type="button" ng-click="onClick(3)">Show Image Demo</button>
+    <button type="button" ng-click="onClick(4)">Show Tip Demo</button>
+    <button type="button" ng-click="onClick(5)">Show Transparency Classic With Line Demo</button>
+    <div>
+        <div id="focus-item">Focus Here</div>
+    </div>
+    <walkthrough
+            id="Demo1"
+            walkthrough-type="transparency"
+            focus-element-id="focus-item"
+            icon="single_tap"
+            main-caption="{{demoCaption1}}"
+            icon-padding-left="0"
+            icon-padding-top="20"
+            is-active="demoActive1">
+    </walkthrough>
+    <walkthrough
+            id="Demo2"
+            walkthrough-type="transparency"
+            focus-element-id="focus-item"
+            icon="arrow"
+            main-caption="{{demoCaption2}}"
+            icon-padding-left="30"
+            icon-padding-top="0"
+            is-active="demoActive2"
+            use-button="true">
+    </walkthrough>
+    <walkthrough
+            id="Demo3"
+            walkthrough-type="transparency"
+            is-active="demoActive3">
+        <img src="https://rawgit.com/souly1/ng-walkthrough/master/screenshots/screenshot3.png" style="height: 100vh; width: 100%;">
+    </walkthrough>
+    <walkthrough
+            id="Demo4"
+            is-active="demoActive4"
+            walkthrough-type="tip"
+            icon="https://rawgit.com/souly1/ng-walkthrough/master/screenshots/myLogo.png"
+            tip-icon-location="FRONT"
+            tip-location="TOP"
+            main-caption="{{demoCaption4}}"
+            tip-color="BLACK"
+            use-button="true">
+    </walkthrough>
+    <walkthrough
+            id="Demo5"
+            walkthrough-type="transparency"
+            focus-element-id="focus-item"
+            icon="line"
+            main-caption="{{demoCaption2}}"
+            focus-connect="left"
+            icon-padding-top="0"
+            is-active="demoActive5"
+            use-button="true">
+    </walkthrough>
+</div>
+</body>
+</html>

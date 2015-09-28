@@ -66,7 +66,7 @@ angular.module('ng-walkthrough', [])
                             retval = ""; //Return nothing, using other dom element for arrow
                             break;
                     }
-                    if (retval == null && icon && icon.length > 0){
+                    if (retval === null && icon && icon.length > 0){
                         retval = icon;
                     }
                     return retval;
@@ -371,7 +371,7 @@ angular.module('ng-walkthrough', [])
                 $transclude(function(clone){
                     init(scope);
                     var transcludeContent = clone.text().trim();
-                    if (!(transcludeContent.length == 0 && clone.length <= 1)) { //Transcluding
+                    if (!(transcludeContent.length === 0 && clone.length <= 1)) { //Transcluding
                         scope.hasTransclude = true;
                     }
                 });

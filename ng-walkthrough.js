@@ -4,7 +4,8 @@ var templateUrl = currentScriptPath.replace(new RegExp("ng-walkthrough.js.*"), '
 var iconsUrl = currentScriptPath.replace(new RegExp("ng-walkthrough.js.*"), 'icons/');
 
 angular.module('ng-walkthrough', [])
-    .directive("walkthrough", function($log, $timeout, $window, $injector) {
+	.directive("walkthrough", ['$log', '$timeout', '$window', '$injector',
+	function($log, $timeout, $window, $injector) {
         var DOM_WALKTHROUGH_TRANSPARENCY_TEXT_CLASS = ".walkthrough-text";
         var DOM_WALKTHROUGH_TIP_TEXT_CLASS = ".walkthrough-tip-text-box";
         var DOM_WALKTHROUGH_HOLE_CLASS = ".walkthrough-hole";
@@ -405,4 +406,4 @@ angular.module('ng-walkthrough', [])
             },
             templateUrl: templateUrl
         };
-    });
+    }]);

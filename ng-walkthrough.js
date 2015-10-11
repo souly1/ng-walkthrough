@@ -123,7 +123,7 @@ angular.module('ng-walkthrough', [])
                 };
 
                 var unbindScreenResize = function(){
-                    angular.element(document.body).off('resize', resizeHandler);
+                    angular.element($window).off('resize', resizeHandler);
                 };
 
                 var init = function(scope){
@@ -383,9 +383,19 @@ angular.module('ng-walkthrough', [])
                             bindClickEvents();
                         }
                         if (!scope.hasTransclude){
-                            scope.setFocusOnElement(attrs.focusElementId);
+                            try {
+                                if (attrs.focusElementId) {
+                                    scope.setFocusOnElement(attrs.focusElementId);
+                                }
+                            } catch(e){
+                                $log.warn('failed to focus on element prior to timeout: ' + attrs.focusElementId);
+                            }
                             //Must timeout to make sure we have final correct coordinates after screen totally load
-                            $timeout(function() {scope.setFocusOnElement(attrs.focusElementId);},100);
+                            if (attrs.focusElementId) {
+                                $timeout(function () {
+                                    scope.setFocusOnElement(attrs.focusElementId);
+                                }, 300);
+                            }
                         }
                         scope.onWalkthroughShow();
                     } else{

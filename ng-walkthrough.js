@@ -67,7 +67,7 @@ angular.module('ng-walkthrough', [])
                             retval = ""; //Return nothing, using other dom element for arrow
                             break;
                     }
-                    if (retval == null && icon && icon.length > 0){
+                    if (retval === null && icon && icon.length > 0){
                         retval = icon;
                     }
                     return retval;
@@ -124,7 +124,7 @@ angular.module('ng-walkthrough', [])
                 };
 
                 var unbindScreenResize = function(){
-                    angular.element(document.body).off('resize', resizeHandler);
+                    angular.element($window).off('resize', resizeHandler);
                 };
 
                 var init = function(scope){
@@ -372,7 +372,7 @@ angular.module('ng-walkthrough', [])
                 $transclude(function(clone){
                     init(scope);
                     var transcludeContent = clone.text().trim();
-                    if (!(transcludeContent.length == 0 && clone.length <= 1)) { //Transcluding
+                    if (!(transcludeContent.length === 0 && clone.length <= 1)) { //Transcluding
                         scope.hasTransclude = true;
                     }
                 });
@@ -384,9 +384,19 @@ angular.module('ng-walkthrough', [])
                             bindClickEvents();
                         }
                         if (!scope.hasTransclude){
-                            scope.setFocusOnElement(attrs.focusElementId);
+                            try {
+                                if (attrs.focusElementId) {
+                                    scope.setFocusOnElement(attrs.focusElementId);
+                                }
+                            } catch(e){
+                                $log.warn('failed to focus on element prior to timeout: ' + attrs.focusElementId);
+                            }
                             //Must timeout to make sure we have final correct coordinates after screen totally load
-                            $timeout(function() {scope.setFocusOnElement(attrs.focusElementId);},100);
+                            if (attrs.focusElementId) {
+                                $timeout(function () {
+                                    scope.setFocusOnElement(attrs.focusElementId);
+                                }, 300);
+                            }
                         }
                         scope.onWalkthroughShow();
                     } else{

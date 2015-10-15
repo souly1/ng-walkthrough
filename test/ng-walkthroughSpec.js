@@ -190,6 +190,7 @@ describe('ng-walkthrough Directive', function() {
         //Act
         $scope.isActive = true;
         $timeout.flush();
+        $timeout.flush();
         var walkthroughFocusedItem = angular.element($("#"+mockedFocusItemId));
         var walkthroughFocusedHole = angular.element($(walkthroughHole));
 
@@ -198,6 +199,42 @@ describe('ng-walkthrough Directive', function() {
         expect(walkthroughFocusedHole[0].offsetLeft).toBe(walkthroughFocusedItem[0].offsetLeft - padding);
         expect(walkthroughFocusedHole[0].offsetTop).toBe(walkthroughFocusedItem[0].offsetTop - padding);
         expect(walkthroughFocusedHole[0].offsetWidth).toBe(walkthroughFocusedItem[0].offsetWidth + 2* padding);
+    });
+
+    it("Should add glow around highlight/focus element when attribute 'has-glow' set to 'true'", function(){
+        //Arrange
+        var marginLeft = 50;
+        var width = 150;
+        var marginTop = 50;
+        var height = 150;
+        var padding = 5;
+
+        var walkthroughHoleGlowClass = ".walkthrough-hole-glow";
+        var mockedFocusItemId = "mockedFocusItem";
+        setFixtures('<walkthrough' +
+        ' is-active="isActive"' +
+        ' has-glow="true"'+
+        ' walkthrough-type="transparency"' +
+        ' focus-element-id="' + mockedFocusItemId + '">' +
+        '</walkthrough>');
+
+        jasmine.getFixtures().appendSet('<div id="' + mockedFocusItemId  + '" style="margin-left:' + marginLeft + 'px;width:' + width + 'px;margin-top:' + marginTop + 'px;height:' + height + 'px;display: inline-block;"></div>');
+
+        $compile($("body"))($scope);
+
+        //Act
+        $scope.isActive = true;
+        $timeout.flush();
+        $timeout.flush();
+        var walkthroughFocusedItem = angular.element($("#"+mockedFocusItemId));
+        var walkthroughHoleGlow = angular.element($(walkthroughHoleGlowClass));
+
+        //Assert
+        expect(walkthroughHoleGlow[0]).toBeVisible();
+        expect(walkthroughHoleGlow[0].offsetHeight).toBe(walkthroughFocusedItem[0].offsetHeight + 2* padding);
+        expect(walkthroughHoleGlow[0].offsetLeft).toBe(walkthroughFocusedItem[0].offsetLeft - padding);
+        expect(walkthroughHoleGlow[0].offsetTop).toBe(walkthroughFocusedItem[0].offsetTop - padding);
+        expect(walkthroughHoleGlow[0].offsetWidth).toBe(walkthroughFocusedItem[0].offsetWidth + 2* padding);
     });
 
     it("Should make highlighted area shaped as circle  when attribute 'is-round' set to 'true'", function(){
@@ -278,6 +315,7 @@ describe('ng-walkthrough Directive', function() {
         //Act
         $scope.isActive = true;
         $timeout.flush();
+        $timeout.flush();
         var displayedIcon = angular.element($(walkthroughIconDOM));
         var walkthroughFocusedItem = angular.element($("#"+mockedFocusItemId));
 
@@ -322,6 +360,7 @@ describe('ng-walkthrough Directive', function() {
         //Act
         $scope.isActive = true;
         $timeout.flush();
+        $timeout.flush();
         var displayedIcon = angular.element($(walkthroughIconDOM));
         var walkthroughFocusedItem = angular.element($("#"+mockedFocusItemId));
 
@@ -361,6 +400,7 @@ describe('ng-walkthrough Directive', function() {
 
         //Act
         $scope.isActive = true;
+        $timeout.flush();
         $timeout.flush();
         var displayedArrow = angular.element($(walkthroughArrowDOM));
         var walkthroughFocusedItem = angular.element($("#"+mockedFocusItemId));
@@ -465,6 +505,7 @@ describe('ng-walkthrough Directive', function() {
 
         //Act
         $scope.isActive = true;
+        $timeout.flush();
         $timeout.flush();
         var displayedIcon = angular.element($(walkthroughIconDOM));
         var walkthroughCaption = angular.element(".walkthrough-text");
@@ -655,5 +696,74 @@ describe('ng-walkthrough Directive', function() {
 
         //Assert
         expect(walkthroughTipTextBoxIcon[0]).toExist();
+    });
+
+    it("Should update hole location in 'transparency' walkthrough when screen resizes", function(done) {
+        //Arrange
+        var walkthroughHole = ".walkthrough-hole";
+        var mockedFocusItemId = "mockedFocusItem";
+        var mockedCaption = "mockedCaption";
+        var iconWanted = "single_tap";
+        var marginLeft = 50;
+        var width = 150;
+        var height = 150;
+        var padding = 5;
+        var expectedFocusOnElementCalls = 1;
+
+        setFixtures('<walkthrough' +
+        ' id="walkthrough"' +
+        ' is-active="isActive"' +
+        ' icon="' + iconWanted + '"' +
+        ' focus-element-id="' + mockedFocusItemId + '"' +
+        ' walkthrough-type="transparency"' +
+        ' main-caption="' + mockedCaption + '">' +
+        '</walkthrough>');
+        jasmine.getFixtures().appendSet("<div id='" + mockedFocusItemId  + "' style='margin-left:" + marginLeft + "px;width:" + width + "px;background-color:green;height:" + height + "px;display: inline-block;'></div>");
+
+        $compile($("body"))($scope);
+        $scope.$digest();
+        $scope.isActive = true;
+        $scope.$digest();
+        $timeout.flush();
+        var callCount = 0;
+        var directiveScope = angular.element('body').find('#walkthrough').isolateScope();
+        spyOn(directiveScope, 'setFocusOnElement').and.callFake(function() {
+            callCount++;
+        });
+        expect(callCount).toBe(0);
+
+        $(window).on('resize', function(){
+            //Assert
+            expect(callCount).toBe(expectedFocusOnElementCalls);
+            done();
+        });
+
+        //Act
+        $(window).resize();
+        $scope.isMoved = true;
+        $scope.$digest();
+    });
+
+    //TODO: Need to implement tests for isBindClickEventToBody attribute
+    xit("Should close walkthrough even when clicking outside it, and should add/remove its event listeners only when it's displayed", function(){
+        //Arrange
+        var mockedCaption = "mockedCaption";
+        var iconWanted = "single_tap";
+        setFixtures('<walkthrough' +
+        ' is-active="isActive"' +
+        ' icon="' + iconWanted + '"' +
+        ' is-bind-click-event-to-body' +
+        ' walkthrough-type="transparency"' +
+        ' main-caption="' + mockedCaption + '">' +
+        '</walkthrough>');
+        $compile($("body"))($scope);
+        $scope.$digest();
+
+        //Act
+        $scope.isActive = true;
+        $scope.$digest();
+
+        //Assert
+        expect(true).toBe(false);
     });
 });

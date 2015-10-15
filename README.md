@@ -118,7 +118,8 @@ and use one of the two configurations:
 - `is-active` (mandatory) - Any walkthrough type. Bound element controls display the directive. Set 'true' to bound element in order to display.
 - `walkthrough-type` (mandatory) - Any walkthrough type. Specifies what type of walkthrough to display. Currently supported are 'transparency' and 'tip' types
 - `focus-element-id` (optional) - Any walkthrough type. ID of DOM element we want to give focus to, without it all screen will be grayed out
-- `is-round` (optional) - For transparency walkthrough. Set to 'true' if you want the focused area to be round, otherwise it will be square set to the size of the DOM element
+- `is-round` (optional) - Any walkthrough type. Set to 'true' if you want the focused area to be round, otherwise it will be square set to the size of the DOM element
+- `has-glow` (optional) - Any walkthrough type. Set to 'true' if you want the focused area to have a glow around it
 - `icon` (optional) - Any walkthrough type. If set to any of the predefined values ("single_tap", "double_tap", "swipe_down", "swipe_left", "swipe_right", "swipe_up"), in such case the image will be bound to focus element (if exists). if giving any other icon then is not bound to focus element
 - `main-caption` (optional) - Any walkthrough type. This is the text that will be displayed in the walk-through. Text can be formatted
 - `use-button` (optional) - Any walkthrough type. set to 'true' you want a button displayed that most be clicked in order to close walkthrough, otherwise clicking anywhere while walkthrough displayed will close it
@@ -127,9 +128,15 @@ and use one of the two configurations:
 - `tip-icon-location` (optional) - For tip walkthrough. In case there is an overlap between the tip text box and the tip icon you can define here which is on top. Either "FRONT" or "BACK"
 - `tip-location` (optional) - For tip walkthrough. Set tip location at the top of screen of closer to bottom. Acceptable values: "TOP" or "BOTTOM"
 - `tip-color` (optional) - For tip walkthrough. Define the tip textbox background color. Currently supports "BLACK" or "WHITE" values
+<<<<<<< HEAD
 - `onWalkthroughShow` (optional) - Any walkthrough type. Bind method to be called when walkthrough is displayed
 - `onWalkthroughHide` (optional) - Any walkthrough type. Bind method to be called when walkthrough is hidden
 - `caption-on-bottom` (optional) - Forces the caption to be displayed on the bottom of the screen.
+=======
+- `is-bind-click-event-to-body` (optional) - Any walkthrough type. If 'use-botton' is not set to true, then any this will bind the click events to the body to capture events outside walkthrough, for example: ionic header
+- `on-walkthrough-show` (optional) - Any walkthrough type. Bind method to be called when walkthrough is displayed
+- `on-walkthrough-hide` (optional) - Any walkthrough type. Bind method to be called when walkthrough is hidden
+>>>>>>> db350fb4241a762e253e727d2263ff07536a8241
 
 ## Testing
 

@@ -4,19 +4,21 @@ var templateUrl = currentScriptPath.replace(new RegExp("ng-walkthrough.js.*"), '
 var iconsUrl = currentScriptPath.replace(new RegExp("ng-walkthrough.js.*"), 'icons/');
 
 angular.module('ng-walkthrough', [])
-    .directive("walkthrough", function($log, $timeout) {
+	.directive("walkthrough", ['$log', '$timeout', '$window', '$injector',
+	function($log, $timeout, $window, $injector) {
         var DOM_WALKTHROUGH_TRANSPARENCY_TEXT_CLASS = ".walkthrough-text";
         var DOM_WALKTHROUGH_TIP_TEXT_CLASS = ".walkthrough-tip-text-box";
         var DOM_WALKTHROUGH_HOLE_CLASS = ".walkthrough-hole";
         var DOM_WALKTHROUGH_TRANSPARENCY_ICON_CLASS = ".walkthrough-icon";
         var DOM_WALKTHROUGH_TIP_ICON_CLASS = ".walkthrough-tip-icon-text-box";
         var DOM_WALKTHROUGH_ARROW_CLASS = ".walkthrough-arrow";
-        var DOM_WALKTHROUGH_BACKGROUND_CLASS = "walkthrough-background";
+        //var DOM_WALKTHROUGH_BACKGROUND_CLASS = "walkthrough-background";
         var DOM_WALKTHROUGH_DONE_BUTTON_CLASS = "walkthrough-done-button";
         var BUTTON_CAPTION_DONE = "Got it!";
         var PADDING_HOLE = 5;
         var PADDING_ARROW_START = 5;
         var gestureIcons = ["single_tap", "double_tap", "swipe_down", "swipe_left", "swipe_right", "swipe_up"];
+        var hasIonic = false;
 
         return {
             restrict: 'E',
@@ -29,12 +31,14 @@ angular.module('ng-walkthrough', [])
                 mainCaption: '@',
                 captionOnBottom: '=',
                 isRound: '=',
+                hasGlow: '=',
                 useButton: '=',
                 iconPaddingLeft: '@',
                 iconPaddingTop: '@',
                 tipLocation: '@',
                 tipIconLocation: '@',
                 tipColor: '@',
+                isBindClickEventToBody: '=',
                 onWalkthroughShow: '&',
                 onWalkthroughHide: '&'
             },
@@ -64,16 +68,77 @@ angular.module('ng-walkthrough', [])
                             retval = ""; //Return nothing, using other dom element for arrow
                             break;
                     }
-                    if (retval == null && icon && icon.length > 0){
+                    if (retval === null && icon && icon.length > 0){
                         retval = icon;
                     }
                     return retval;
                 };
 
+                var clickFunction = function clickFunction(e){
+                    if (scope.clickEvent == 'click') {
+                        if (!scope.useButton){
+                            e.stopPropagation();
+                            e.preventDefault();
+                            scope.onCloseClicked(e);
+                            $timeout(function () {
+                                unbindClickEvents();
+                            }, 1000);
+                        }
+                    }
+                };
+
+                var touchFunction = function touchFunction(e){
+                    if (scope.clickEvent == 'touch') {
+                        if (!scope.useButton) {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            scope.onCloseTouched(e);
+                            $timeout(function () {
+                                unbindClickEvents();
+                            }, 1000);
+                        }
+                    }
+                };
+
+                var resizeHandler = function(){
+                    scope.setFocusOnElement(attrs.focusElementId);
+                };
+
+                var unbindClickEvents = function(){
+                    angular.element(document.body).off('mousedown', clickFunction);
+                    angular.element(document.body).off('mouseup', clickFunction);
+                    angular.element(document.body).off('click', clickFunction);
+                    angular.element(document.body).off('touch', touchFunction);
+                };
+
+                var bindClickEvents = function(){
+                    $timeout(function(){
+                        angular.element(document.body).on('mousedown', clickFunction);
+                        angular.element(document.body).on('mouseup', clickFunction);
+                        angular.element(document.body).on('click', clickFunction);
+                        angular.element(document.body).on('touch', touchFunction);
+                    }, 1000);
+                };
+
+                var bindScreenResize = function(){
+                        angular.element($window).on('resize', resizeHandler);
+                };
+
+                var unbindScreenResize = function(){
+                    angular.element($window).off('resize', resizeHandler);
+                };
+
                 var init = function(scope){
+                    try {
+                        var ionic = $injector.get("$ionicPosition");
+                        hasIonic = true;
+                    } catch(err) {
+                        hasIonic = false;
+                    }
+
                     scope.clickEvent = 'click';
                     //noinspection JSUnresolvedVariable
-                    if (typeof ionic !== 'undefined') { //Might need to comment this out if fails build on angular only machine
+                    if (hasIonic) { //Might need to comment this out if fails build on angular only machine
                         scope.clickEvent = 'touch';
                     }
 
@@ -87,8 +152,13 @@ angular.module('ng-walkthrough', [])
                     scope.onCloseClicked = function($event) {
                         //if Angular only
                         if (scope.clickEvent == 'click') {
-                            if (($event.currentTarget.className.indexOf(DOM_WALKTHROUGH_BACKGROUND_CLASS) > -1 && !scope.useButton) ||
-                                ($event.currentTarget.className.indexOf(DOM_WALKTHROUGH_DONE_BUTTON_CLASS) > -1 && scope.useButton)) {
+                            if ((!scope.useButton) ||
+                                ($event.currentTarget.className.indexOf(DOM_WALKTHROUGH_DONE_BUTTON_CLASS) > -1)) {
+                                scope.closeWalkthrough();
+                            }
+                        } else if (scope.clickEvent == 'touch') { //We need this in case both angular an ionic are for some reason loaded
+                            if ((!scope.useButton) ||
+                                ($event.currentTarget.className.indexOf(DOM_WALKTHROUGH_DONE_BUTTON_CLASS) > -1)) {
                                 scope.closeWalkthrough();
                                 $event.stopPropagation();
                             }
@@ -97,8 +167,8 @@ angular.module('ng-walkthrough', [])
 
                     scope.onCloseTouched = function($event) {
                         if (scope.clickEvent == 'touch') {
-                            if (($event.currentTarget.className.indexOf(DOM_WALKTHROUGH_BACKGROUND_CLASS) > -1 && !scope.useButton) ||
-                                ($event.currentTarget.className.indexOf(DOM_WALKTHROUGH_DONE_BUTTON_CLASS) > -1 && scope.useButton)) {
+                            if ((!scope.useButton) ||
+                                ($event.currentTarget.className.indexOf(DOM_WALKTHROUGH_DONE_BUTTON_CLASS) > -1)) {
                                 scope.closeWalkthrough();
                                 $event.stopPropagation();
                             }
@@ -116,7 +186,7 @@ angular.module('ng-walkthrough', [])
                         "top:" + (top - PADDING_HOLE) + "px;" +
                         "width:" + (width + (2 * PADDING_HOLE)) + "px;" +
                         "height:" + (height + (2 * PADDING_HOLE)) + "px;";
-                    scope.walkthroughHoleElement.attr('style', holeDimensions);
+                    scope.walkthroughHoleElements.attr('style', holeDimensions);
                 };
 
                 var moveTextToBottom = function(newTop){
@@ -128,11 +198,12 @@ angular.module('ng-walkthrough', [])
 
                 //Check if given icon covers text
                 var isItemOnText = function(iconLeft, iconTop, iconRight, iconBottom) {
+                    var offsetCoordinates = getOffsetCoordinates(scope.walkthroughTextElement);
                     var retval = false;
-                    var textLeft = scope.walkthroughTextElement[0].offsetLeft;
-                    var textRight = scope.walkthroughTextElement[0].offsetLeft + scope.walkthroughTextElement[0].offsetWidth;
-                    var textTop = scope.walkthroughTextElement[0].offsetTop;
-                    var textBottom = scope.walkthroughTextElement[0].offsetTop + scope.walkthroughTextElement[0].offsetHeight;
+                    var textLeft = offsetCoordinates.left;
+                    var textRight = offsetCoordinates.left + offsetCoordinates.width;
+                    var textTop = offsetCoordinates.top;
+                    var textBottom = offsetCoordinates.top + offsetCoordinates.height;
                     if (!(textRight < iconLeft ||
                         textLeft > iconRight ||
                         textBottom < iconTop ||
@@ -144,8 +215,9 @@ angular.module('ng-walkthrough', [])
 
                 //Sets the icon displayed according to directive argument
                 var setIconAndText = function(iconLeft, iconTop, paddingLeft, paddingTop){
-                    var iconHeight = scope.walkthroughIconElement[0].offsetHeight;
-                    var iconWidth = scope.walkthroughIconElement[0].offsetWidth;
+                    var offsetCoordinates = getOffsetCoordinates(scope.walkthroughIconElement);
+                    var iconHeight = offsetCoordinates.height;
+                    var iconWidth = offsetCoordinates.width;
                     var iconLeftWithPadding = iconLeft + paddingLeft;
                     var iconTopWithPadding = iconTop + paddingTop;
                     var iconRight = iconLeftWithPadding + iconWidth;
@@ -166,8 +238,9 @@ angular.module('ng-walkthrough', [])
                 };
 
                 var setArrowAndText = function(pointSubjectLeft, pointSubjectTop, pointSubjectWidth, pointSubjectHeight, paddingLeft){
-                    var startLeft = scope.walkthroughTextElement[0].offsetLeft + scope.walkthroughTextElement[0].offsetWidth /2;
-                    var startTop = scope.walkthroughTextElement[0].offsetTop + scope.walkthroughTextElement[0].offsetHeight + PADDING_ARROW_START;
+                    var offsetCoordinates = getOffsetCoordinates(scope.walkthroughTextElement);
+                    var startLeft = offsetCoordinates.left + offsetCoordinates.width /2;
+                    var startTop = offsetCoordinates.top + offsetCoordinates.height + PADDING_ARROW_START;
 
                     var endTop = 0;
                     var endLeft = 0;
@@ -213,23 +286,46 @@ angular.module('ng-walkthrough', [])
                     scope.walkthroughIconElement.attr('style', iconLocation);
                 };
 
+                var getOffsetCoordinates = function(focusElement){
+                    var width;
+                    var height;
+                    var left;
+                    var top;
+                    if (hasIonic) { //Might need to comment this out if fails build on angular only machine
+                        var $ionicPosition = $injector.get('$ionicPosition');
+                        var ionicElement = $ionicPosition.offset(focusElement);
+                        width = ionicElement.width;
+                        height = ionicElement.height;
+                        left = ionicElement.left;
+                        top = ionicElement.top;
+                    } else {
+                        width = focusElement[0].offsetWidth;
+                        height = focusElement[0].offsetHeight;
+                        left = focusElement[0].offsetLeft;
+                        top = focusElement[0].offsetTop;
+                        var parent = focusElement[0].offsetParent;
+
+                        while (parent) {
+                            left = left + parent.offsetLeft;
+                            top = top + parent.offsetTop;
+                            parent = parent.offsetParent;
+                        }
+                    }
+                    return { top:top, left: left, height: height, width: width};
+                };
+
                 //Attempts to highlight the given element ID and set Icon to it if exists, if not use default - right under text
                 var setElementLocations = function(walkthroughIconWanted, focusElementId, iconPaddingLeft, iconPaddingTop){
                     var focusElement = document.querySelector('#' + focusElementId);
                     var angularElement = angular.element(focusElement);
                     if (angularElement.length > 0) {
-                        var width = angularElement[0].offsetWidth;
-                        var height = angularElement[0].offsetHeight;
-                        var left = angularElement[0].offsetLeft;
-                        var top = angularElement[0].offsetTop;
-                        var parent = angularElement[0].offsetParent;
 
-                        while (parent) {
-                            left = left + parent.offsetLeft;
-                            top = top  + parent.offsetTop;
+                        var offsetCoordinates = getOffsetCoordinates(angularElement);
+                        var width = offsetCoordinates.width;
+                        var height = offsetCoordinates.height;
+                        var left = offsetCoordinates.left;
+                        var top = offsetCoordinates.top;
 
-                            parent = parent.offsetParent;
-                        }
                         setFocus(left, top, width, height);
                         var paddingLeft = parseFloat(iconPaddingLeft);
                         var paddingTop = parseFloat(iconPaddingTop);
@@ -242,6 +338,12 @@ angular.module('ng-walkthrough', [])
                         }
                         if (walkthroughIconWanted == "arrow"){
                             setArrowAndText(left, top + paddingTop, width, height, paddingLeft);
+                        }
+                        //if tip mode with icon that we want to set padding to, set it
+                        if (scope.walkthroughType== "tip" &&
+                            walkthroughIconWanted && walkthroughIconWanted.length > 0 &&
+                            (iconPaddingLeft || iconPaddingTop)){
+                            setTipIconPadding(iconPaddingLeft, iconPaddingTop);
                         }
                     } else {
                         if (focusElementId) {
@@ -257,7 +359,12 @@ angular.module('ng-walkthrough', [])
                     }
                 };
 
-                scope.walkthroughHoleElement = angular.element(element[0].querySelector(DOM_WALKTHROUGH_HOLE_CLASS));
+                scope.setFocusOnElement = function(focusElementId){
+                    setElementLocations(scope.icon, focusElementId, scope.iconPaddingLeft, scope.iconPaddingTop);
+                };
+
+                var holeElements = element[0].querySelectorAll(DOM_WALKTHROUGH_HOLE_CLASS);
+                scope.walkthroughHoleElements = angular.element(holeElements);
                 var textClass = (scope.walkthroughType== "tip")? DOM_WALKTHROUGH_TIP_TEXT_CLASS: DOM_WALKTHROUGH_TRANSPARENCY_TEXT_CLASS;
                 scope.walkthroughTextElement = angular.element(element[0].querySelector(textClass));
                 var iconClass = (scope.walkthroughType== "tip")? DOM_WALKTHROUGH_TIP_ICON_CLASS: DOM_WALKTHROUGH_TRANSPARENCY_ICON_CLASS;
@@ -266,21 +373,42 @@ angular.module('ng-walkthrough', [])
                 $transclude(function(clone){
                     init(scope);
                     var transcludeContent = clone.text().trim();
-                    if (!(transcludeContent.length == 0 && clone.length <= 1)) { //Transcluding
+                    if (!(transcludeContent.length === 0 && clone.length <= 1)) { //Transcluding
                         scope.hasTransclude = true;
                     }
                 });
 
                 scope.$watch('isActive', function(newValue){
                     if(newValue){
+                        bindScreenResize();
+                        if (scope.isBindClickEventToBody){
+                            bindClickEvents();
+                        }
                         if (!scope.hasTransclude){
+                            try {
+                                if (attrs.focusElementId) {
+                                    scope.setFocusOnElement(attrs.focusElementId);
+                                }
+                            } catch(e){
+                                $log.warn('failed to focus on element prior to timeout: ' + attrs.focusElementId);
+                            }
                             //Must timeout to make sure we have final correct coordinates after screen totally load
-                            $timeout(function() {setElementLocations(scope.icon, attrs.focusElementId, scope.iconPaddingLeft, scope.iconPaddingTop)},0);
+                            if (attrs.focusElementId) {
+                                $timeout(function () {
+                                    scope.setFocusOnElement(attrs.focusElementId);
+                                }, 300);
+                            }
                         }
                         scope.onWalkthroughShow();
+                    } else{
+                        unbindScreenResize();
                     }
                 });
             },
             templateUrl: templateUrl
         };
+<<<<<<< HEAD
     });
+=======
+    }]);
+>>>>>>> db350fb4241a762e253e727d2263ff07536a8241

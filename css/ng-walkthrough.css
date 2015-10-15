@@ -1,3 +1,12 @@
+.walkthrough-hole-glow {
+    position: absolute;
+    outline: none;
+    border: 2px solid #FFFF66 !important;
+    box-shadow: 0 0 36px #FFFF66 !important;
+    -webkit-appearance: none;
+    box-sizing: border-box;
+}
+
 .walkthrough-background {
     position:absolute;
     top:0;
@@ -21,6 +30,7 @@
     -moz-box-shadow: 0 0 0 1997px rgba(0, 0, 0, .8);
     -webkit-box-shadow: 0 0 0 1997px rgba(0, 0, 0, .8);
     box-shadow: 0 0 0 1997px rgba(0, 0, 0, .8);
+    -webkit-appearance: none;
 }
 
 .walkthrough-element.walkthrough-text{

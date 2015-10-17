@@ -106,28 +106,50 @@
     border-radius: 200px;
 }
 
-.walkthrough-tip-top{
-    top: 25px;
-    position: absolute;
-    width: 100%;
-}
-
-.walkthrough-tip-bottom{
-    bottom: 190px;
-    position: absolute;
-    width: 100%;
-}
-
 .walkthrough-tip-text-box {
-    top: 128px;
-    position: absolute;
-    left: 16px;
-    right: 16px;
+    /*top: 128px;*/
+    position: relative;
+    margin-left: 16px;
+    margin-right: 16px;
     border: 2px solid;
     border-radius: 35px;
     padding: 14px;
-    margin-top: 0;
-    margin-bottom: 0;
+    /*margin-top: 0;*/
+    /*margin-bottom: 0;*/
+}
+
+.walkthrough-container{
+    float: left;
+    position: relative;
+    height: 100vh;
+    width: 100%;
+}
+
+.walkthrough-inner{
+    position: absolute;
+    width: 100%;
+}
+
+.walkthrough-container-transparency > .walkthrough-inner{
+    height: 100%;
+}
+
+.walkthrough-text-container{
+    position: absolute;
+    width: 100%;
+}
+
+.walkthrough-container-tip > .walkthrough-top, .walkthrough-container-transparency > .walkthrough-top .walkthrough-text-container{
+    top: 15px;
+}
+
+.walkthrough-container-tip > .walkthrough-bottom {
+    bottom: 0;
+}
+
+/* take 'done' button into consideration */
+.walkthrough-container-transparency > .walkthrough-bottom .walkthrough-text-container{
+    bottom: 70px;
 }
 
 .walkthrough-tip-icon-image-front{
@@ -138,19 +160,25 @@
     z-index: 999;
 }
 
-.walkthrough-tip-icon-text-box{
+.walkthrough-tip-icon-text-box {
     height: 142px;
-    right: 5%;
-    position: absolute;
+    /*right: 9%;*/
+    position: relative;
+    margin-bottom: -32px;
+    margin-right: -250px;
+    /*bottom: 70px;*/
 }
 
 .walkthrough-tip-done-button-text-box{
-    top: 109px;
-    position: absolute;
+    /*top: 109px;*/
+    /*bottom: 59px;*/
+    position: relative;
     z-index: 1002;
-    right: -8px;
+    /*right: -7px;*/
+    margin-top: 107px;
     background-color: transparent;
     border: 0;
+    float: right;
 }
 
 .walkthrough-tip-button-image-text-box{

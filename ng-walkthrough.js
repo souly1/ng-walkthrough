@@ -29,12 +29,15 @@ angular.module('ng-walkthrough', [])
                 icon: '@',
                 focusElementId: '@',
                 mainCaption: '@',
-                captionOnBottom: '=',
+                forceCaptionLocation: '@',
                 isRound: '=',
                 hasGlow: '=',
                 useButton: '=',
                 iconPaddingLeft: '@',
                 iconPaddingTop: '@',
+                /**
+                 * @deprecated Since version 0.3.1. Will be deleted in next versions. Use property forceCaptionLocation instead.
+                 */
                 tipLocation: '@',
                 tipIconLocation: '@',
                 tipColor: '@',
@@ -160,9 +163,9 @@ angular.module('ng-walkthrough', [])
                             if ((!scope.useButton) ||
                                 ($event.currentTarget.className.indexOf(DOM_WALKTHROUGH_DONE_BUTTON_CLASS) > -1)) {
                                 scope.closeWalkthrough();
-                                $event.stopPropagation();
                             }
                         }
+                        $event.stopPropagation();
                     };
 
                     scope.onCloseTouched = function($event) {
@@ -170,9 +173,9 @@ angular.module('ng-walkthrough', [])
                             if ((!scope.useButton) ||
                                 ($event.currentTarget.className.indexOf(DOM_WALKTHROUGH_DONE_BUTTON_CLASS) > -1)) {
                                 scope.closeWalkthrough();
-                                $event.stopPropagation();
                             }
                         }
+                        $event.stopPropagation();
                     };
                     scope.closeIcon = iconsUrl + "Hotspot-close.png";
                     scope.walkthroughIcon = getIcon(scope.icon);
@@ -223,8 +226,8 @@ angular.module('ng-walkthrough', [])
                     var iconRight = iconLeftWithPadding + iconWidth;
                     var iconBottom = iconTopWithPadding + iconHeight;
 
-                    //Check if text overlaps icon, if does, move it to bottom
-                    if (scope.captionOnBottom || isItemOnText(iconLeftWithPadding, iconTopWithPadding, iconRight, iconBottom)){
+                    //Check if text overlaps icon or user explicitly wants text at bottom, if does, move it to bottom
+                    if (isItemOnText(iconLeftWithPadding, iconTopWithPadding, iconRight, iconBottom)){
                         moveTextToBottom(iconBottom);
                     }
 
@@ -240,8 +243,11 @@ angular.module('ng-walkthrough', [])
                 var setArrowAndText = function(pointSubjectLeft, pointSubjectTop, pointSubjectWidth, pointSubjectHeight, paddingLeft){
                     var offsetCoordinates = getOffsetCoordinates(scope.walkthroughTextElement);
                     var startLeft = offsetCoordinates.left + offsetCoordinates.width /2;
-                    var startTop = offsetCoordinates.top + offsetCoordinates.height + PADDING_ARROW_START;
+                    var startTop = offsetCoordinates.top + PADDING_ARROW_START;
 
+                    if (scope.forceCaptionLocation === "TOP"){
+                        startTop += offsetCoordinates.height;
+                    }
                     var endTop = 0;
                     var endLeft = 0;
 
@@ -253,8 +259,8 @@ angular.module('ng-walkthrough', [])
                         endTop = pointSubjectTop + (pointSubjectHeight/2);
                     }
 
-                    //Check if text overlaps icon, if does, move it to bottom
-                    if (scope.captionOnBottom || isItemOnText(startLeft, startTop, endLeft, endTop)){
+                    //Check if text overlaps icon or user explicitly wants text at bottom, if does, move it to bottom
+                    if (isItemOnText(startLeft, startTop, endLeft, endTop)){
                         moveTextToBottom(startTop);
                     }
 
@@ -333,11 +339,16 @@ angular.module('ng-walkthrough', [])
                         if (!paddingTop) { paddingTop = 0;}
 
                         //If Gesture icon given bind it to hole as well
-                        if (walkthroughIconWanted && walkthroughIconWanted != "arrow"){
-                            setIconAndText(left + width/2, top  + height/2, paddingLeft, paddingTop);
+                        if (walkthroughIconWanted && walkthroughIconWanted !== "arrow" && scope.walkthroughType === "transparency"){
+                            scope.$applyAsync(function () {
+                                setIconAndText(left + width/2, top  + height/2, paddingLeft, paddingTop);
+                            });
                         }
                         if (walkthroughIconWanted == "arrow"){
-                            setArrowAndText(left, top + paddingTop, width, height, paddingLeft);
+                            //Need to update text location according to conditional class added 'walkthrough-transparency-bottom'
+                            scope.$applyAsync(function () {
+                                setArrowAndText(left, top + paddingTop, width, height, paddingLeft);
+                            });
                         }
                         //if tip mode with icon that we want to set padding to, set it
                         if (scope.walkthroughType== "tip" &&
@@ -378,6 +389,17 @@ angular.module('ng-walkthrough', [])
                     }
                 });
 
+                var handleTipLocationDeprecated = function(){
+                    console.warn("Since version 0.3.1 tipLocation is deprecated and will be deleted in next versions. Use property 'forceCaptionLocation' instead.");
+                    //noinspection JSDeprecatedSymbols
+                    scope.forceCaptionLocation = scope.tipLocation;
+                };
+
+                //noinspection JSDeprecatedSymbols
+                if (scope.tipLocation){
+                    handleTipLocationDeprecated();
+                }
+
                 scope.$watch('isActive', function(newValue){
                     if(newValue){
                         bindScreenResize();
@@ -407,8 +429,4 @@ angular.module('ng-walkthrough', [])
             },
             templateUrl: templateUrl
         };
-<<<<<<< HEAD
-    });
-=======
     }]);
->>>>>>> db350fb4241a762e253e727d2263ff07536a8241

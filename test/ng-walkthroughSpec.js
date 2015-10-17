@@ -608,11 +608,11 @@ describe('ng-walkthrough Directive', function() {
 
     it("Should display tip walkthrough text box at bottom part of screen", function(){
         //Arrange
-        var mockedCaption = "mockedCaption";
+        var mockedCaption = "mocked caption at bottom";
         setFixtures('<walkthrough' +
         ' is-active="isActive"' +
         ' walkthrough-type="tip"' +
-        ' tip-location="BOTTOM"' +
+        ' force-caption-location="BOTTOM"' +
         ' main-caption="' + mockedCaption + '">' +
         '</walkthrough>');
         $compile($("body"))($scope);
@@ -622,19 +622,42 @@ describe('ng-walkthrough Directive', function() {
         $scope.isActive = true;
         $scope.$digest();
 
-        var walkthroughTipTextBox = $('.walkthrough-tip-bottom');
+        var documentRectangle = document.body.getBoundingClientRect();
+        var walkthroughTipTextBox = $('.walkthrough-container-tip > .walkthrough-bottom');
 
         //Assert
         expect(walkthroughTipTextBox[0]).toExist();
     });
 
+    it("Should display transparency walkthrough text at bottom part of screen", function(){
+        //Arrange
+        var mockedCaption = "mocked caption at bottom";
+        setFixtures('<walkthrough' +
+            ' is-active="isActive"' +
+            ' walkthrough-type="transparency"' +
+            ' force-caption-location="BOTTOM"' +
+            ' main-caption="' + mockedCaption + '">' +
+            '</walkthrough>');
+        $compile($("body"))($scope);
+        $scope.$digest();
+
+        //Act
+        $scope.isActive = true;
+        $scope.$digest();
+
+        var walkthroughTransparencyTextBox = $('.walkthrough-container-transparency > .walkthrough-bottom .walkthrough-text-container');
+
+        //Assert
+        expect(walkthroughTransparencyTextBox[0]).toExist();
+    });
+
     it("Should display tip walkthrough text box at top part of screen", function(){
         //Arrange
-        var mockedCaption = "mockedCaption";
+        var mockedCaption = "mocked caption at top";
         setFixtures('<walkthrough' +
         ' is-active="isActive"' +
         ' walkthrough-type="tip"' +
-        ' tip-location="TOP"' +
+        ' force-caption-location="TOP"' +
         ' main-caption="' + mockedCaption + '">' +
         '</walkthrough>');
         $compile($("body"))($scope);
@@ -644,7 +667,7 @@ describe('ng-walkthrough Directive', function() {
         $scope.isActive = true;
         $scope.$digest();
 
-        var walkthroughTipTextBox = $('.walkthrough-tip-top');
+        var walkthroughTipTextBox = $('.walkthrough-container-tip > .walkthrough-top');
 
         //Assert
         expect(walkthroughTipTextBox[0]).toExist();

@@ -126,17 +126,11 @@ and use one of the two configurations:
 - `icon-padding-left` (optional) - Any walkthrough type. Add padding to the icon from the left in percentage
 - `icon-padding-top` (optional) - Any walkthrough type. Add padding to the icon from the top in pixels
 - `tip-icon-location` (optional) - For tip walkthrough. In case there is an overlap between the tip text box and the tip icon you can define here which is on top. Either "FRONT" or "BACK"
-- `tip-location` (optional) - For tip walkthrough. Set tip location at the top of screen of closer to bottom. Acceptable values: "TOP" or "BOTTOM"
+- `force-caption-location` (optional) - Any walkthrough type. Set caption location at the top of screen or closer to bottom. Acceptable values: "TOP" or "BOTTOM"
 - `tip-color` (optional) - For tip walkthrough. Define the tip textbox background color. Currently supports "BLACK" or "WHITE" values
-<<<<<<< HEAD
-- `onWalkthroughShow` (optional) - Any walkthrough type. Bind method to be called when walkthrough is displayed
-- `onWalkthroughHide` (optional) - Any walkthrough type. Bind method to be called when walkthrough is hidden
-- `caption-on-bottom` (optional) - Forces the caption to be displayed on the bottom of the screen.
-=======
 - `is-bind-click-event-to-body` (optional) - Any walkthrough type. If 'use-botton' is not set to true, then any this will bind the click events to the body to capture events outside walkthrough, for example: ionic header
 - `on-walkthrough-show` (optional) - Any walkthrough type. Bind method to be called when walkthrough is displayed
 - `on-walkthrough-hide` (optional) - Any walkthrough type. Bind method to be called when walkthrough is hidden
->>>>>>> db350fb4241a762e253e727d2263ff07536a8241
 
 ## Testing
 

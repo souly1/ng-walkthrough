@@ -1,6 +1,6 @@
 {
   "name": "ng-walkthrough",
-  "version": "0.2.4",
+  "version": "0.3.1",
   "description": "One of the most common design challenges emerging in mobile design is that of 'invitation' - creating an explanation walk through during user first interaction with the app so to engage the customer. Following Theresa Neil's design pattern from Mobile Design Pattern Gallery",
   "dependencies": {},
   "devDependencies": {

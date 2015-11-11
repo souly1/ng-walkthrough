@@ -19,6 +19,10 @@ angular.module('ng-walkthrough', [])
         var PADDING_ARROW_START = 5;
         var gestureIcons = ["single_tap", "double_tap", "swipe_down", "swipe_left", "swipe_right", "swipe_up"];
         var hasIonic = false;
+        var canTouch = true; //Used to prevent issue where onWalkthroughHide fired twice when have angular and ionic
+                             //due to ontouch being called and then on-click called.
+                             //issue can be seen at:
+                             //https://github.com/angular/angular.js/issues/6251
 
         return {
             restrict: 'E',
@@ -103,6 +107,19 @@ angular.module('ng-walkthrough', [])
                     }
                 };
 
+                var attemptTouchEvent = function(){
+                    if (scope.clickEvent == 'touch' && canTouch) { //We need this in case both angular an ionic are for some reason loaded
+                        if ((!scope.useButton) ||
+                            ($event.currentTarget.className.indexOf(DOM_WALKTHROUGH_DONE_BUTTON_CLASS) > -1)) {
+                            scope.closeWalkthrough();
+                            canTouch = false;
+                            $timeout(function(){
+                                canTouch = true;
+                            }, 500);
+                        }
+                    }
+                };
+
                 var resizeHandler = function(){
                     scope.setFocusOnElement(attrs.focusElementId);
                 };
@@ -153,30 +170,24 @@ angular.module('ng-walkthrough', [])
 
                     //Event used when background clicked, if we use button then do nothing
                     scope.onCloseClicked = function($event) {
+                        $event.stopPropagation();
+
                         //if Angular only
                         if (scope.clickEvent == 'click') {
                             if ((!scope.useButton) ||
                                 ($event.currentTarget.className.indexOf(DOM_WALKTHROUGH_DONE_BUTTON_CLASS) > -1)) {
                                 scope.closeWalkthrough();
                             }
-                        } else if (scope.clickEvent == 'touch') { //We need this in case both angular an ionic are for some reason loaded
-                            if ((!scope.useButton) ||
-                                ($event.currentTarget.className.indexOf(DOM_WALKTHROUGH_DONE_BUTTON_CLASS) > -1)) {
-                                scope.closeWalkthrough();
-                            }
+                        } else { //We need this in case both angular an ionic are for some reason loaded
+                            attemptTouchEvent(scope);
                         }
-                        $event.stopPropagation();
                     };
 
                     scope.onCloseTouched = function($event) {
-                        if (scope.clickEvent == 'touch') {
-                            if ((!scope.useButton) ||
-                                ($event.currentTarget.className.indexOf(DOM_WALKTHROUGH_DONE_BUTTON_CLASS) > -1)) {
-                                scope.closeWalkthrough();
-                            }
-                        }
                         $event.stopPropagation();
+                        attemptTouchEvent(scope);
                     };
+
                     scope.closeIcon = iconsUrl + "Hotspot-close.png";
                     scope.walkthroughIcon = getIcon(scope.icon);
                     scope.buttonCaption = BUTTON_CAPTION_DONE;

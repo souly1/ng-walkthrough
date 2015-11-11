@@ -40,5 +40,13 @@
   "main": "karma.conf.js",
   "directories": {
     "test": "test"
-  }
+  },
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "screenshots",
+    "test",
+    "tests"
+  ]
 }

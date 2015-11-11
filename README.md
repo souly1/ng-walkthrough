@@ -45,6 +45,7 @@ This directive has been originally developed for the [Ionic Framework](http://io
 
 ## Installation
 
+* **NPM**: `npm install ng-walkthrough`
 * **Bower**: `bower install ng-walkthrough`
 
 ## Usage

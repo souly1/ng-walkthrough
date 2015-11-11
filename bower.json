@@ -1,6 +1,6 @@
 {
   "name": "ng-walkthrough",
-  "version": "0.2.4",
+  "version": "0.3.1",
   "homepage": "https://github.com/souly1/ng-walkthrough",
   "authors": [
     "Ophir Stern <souly01@gmail.com>"
@@ -8,10 +8,10 @@
   "main": "ng-walkthrough.js",
   "description": "One of the most common design challenges emerging in mobile design is that of 'invitation' - creating an explanation walk through during user first interaction with the app so to engage the customer. Following Theresa Neil's design pattern from Mobile Design Pattern Gallery",
   "dependencies": {
-    "angular": "1.4.3",
-    "showdown": "~0.3.1"
+    "angular": "1.4.3"
   },
   "devDependencies": {
+    "showdown": "~0.3.1",
     "angular-mocks": "1.4.3",
     "jquery": "^2.0",
     "jasmine-core": "^2.1",
@@ -21,7 +21,9 @@
     "angular-route": "1.4.3",
     "angular-sanitize": "1.4.3",
     "angular-ui-router": "0.2.13",
-    "ionic": "~1.1.0"
+    "ionic": "~1.1.0",
+    "ionic-material": "~0.4.2",
+    "robotodraft": "~1.1.0"
   },
   "resolutions": {
     "angular": "1.4.3"
@@ -40,6 +42,7 @@
     "**/.*",
     "node_modules",
     "bower_components",
+    "screenshots",
     "test",
     "tests"
   ]

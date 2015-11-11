@@ -1,6 +1,6 @@
 {
   "name": "ng-walkthrough",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "homepage": "https://github.com/souly1/ng-walkthrough",
   "authors": [
     "Ophir Stern <souly01@gmail.com>"
@@ -11,7 +11,7 @@
     "angular": "1.4.3"
   },
   "devDependencies": {
-    "showdown": "0.3.2",
+    "showdown": "0.3.1",
     "angular-mocks": "1.4.3",
     "jquery": "^2.0",
     "jasmine-core": "^2.1",

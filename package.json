@@ -17,7 +17,7 @@
     "karma-ng-html2js-preprocessor": "^0.1.0"
   },
   "scripts": {
-    "test": "./node_modules/.bin/karma start karma.conf.js --single-run"
+    "test": "karma start karma.conf.js --single-run"
   },
   "keywords": [
     "angularjs",
@@ -32,6 +32,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/souly1/ng-walkthrough.git"
+    "url": "git+https://github.com/souly1/ng-walkthrough.git"
+  },
+  "bugs": {
+    "url": "https://github.com/souly1/ng-walkthrough/issues"
+  },
+  "main": "karma.conf.js",
+  "directories": {
+    "test": "test"
   }
 }

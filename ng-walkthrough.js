@@ -107,10 +107,10 @@ angular.module('ng-walkthrough', [])
                     }
                 };
 
-                var attemptTouchEvent = function(){
+                var attemptTouchEvent = function(e){
                     if (scope.clickEvent == 'touch' && canTouch) { //We need this in case both angular an ionic are for some reason loaded
                         if ((!scope.useButton) ||
-                            ($event.currentTarget.className.indexOf(DOM_WALKTHROUGH_DONE_BUTTON_CLASS) > -1)) {
+                            (e.currentTarget.className.indexOf(DOM_WALKTHROUGH_DONE_BUTTON_CLASS) > -1)) {
                             scope.closeWalkthrough();
                             canTouch = false;
                             $timeout(function(){
@@ -179,13 +179,13 @@ angular.module('ng-walkthrough', [])
                                 scope.closeWalkthrough();
                             }
                         } else { //We need this in case both angular an ionic are for some reason loaded
-                            attemptTouchEvent(scope);
+                            attemptTouchEvent($event);
                         }
                     };
 
                     scope.onCloseTouched = function($event) {
                         $event.stopPropagation();
-                        attemptTouchEvent(scope);
+                        attemptTouchEvent($event);
                     };
 
                     scope.closeIcon = iconsUrl + "Hotspot-close.png";

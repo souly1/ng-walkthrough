@@ -111,11 +111,13 @@ angular.module('ng-walkthrough', [])
                     if (scope.clickEvent == 'touch' && canTouch) { //We need this in case both angular an ionic are for some reason loaded
                         if ((!scope.useButton) ||
                             (e.currentTarget.className.indexOf(DOM_WALKTHROUGH_DONE_BUTTON_CLASS) > -1)) {
-                            scope.closeWalkthrough();
                             canTouch = false;
-                            $timeout(function(){
-                                canTouch = true;
-                            }, 500);
+                            $timeout(function() {//This timeout added to avoid event propagation happening outside of directive bug
+                                scope.closeWalkthrough();
+                                $timeout(function () {
+                                    canTouch = true;
+                                }, 500);
+                            }, 200);
                         }
                     }
                 };
@@ -417,8 +419,8 @@ angular.module('ng-walkthrough', [])
                         if (scope.isBindClickEventToBody){
                             bindClickEvents();
                         }
-                        if (!scope.hasTransclude){
-                            try {
+                        //if (!scope.hasTransclude){//remarked cause did not focus on search field in recipe select
+                        try {
                                 if (attrs.focusElementId) {
                                     scope.setFocusOnElement(attrs.focusElementId);
                                 }
@@ -431,7 +433,7 @@ angular.module('ng-walkthrough', [])
                                     scope.setFocusOnElement(attrs.focusElementId);
                                 }, 300);
                             }
-                        }
+                        //}
                         scope.onWalkthroughShow();
                     } else{
                         unbindScreenResize();

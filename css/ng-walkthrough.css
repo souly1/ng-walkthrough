@@ -99,7 +99,9 @@
 
 .walkthrough-transclude{
     position: relative;
-    z-index: 1001;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
 }
 
 .walkthrough-hole-round{
@@ -121,12 +123,13 @@
 .walkthrough-container{
     float: left;
     position: relative;
-    height: 100vh;
+    height: 100%;
     width: 100%;
 }
 
 .walkthrough-inner{
-    position: absolute;
+    position: fixed;
+    z-index: 3;
     width: 100%;
 }
 

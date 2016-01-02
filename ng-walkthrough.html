@@ -9,7 +9,7 @@
                 </div>
                 <img class="walkthrough-element walkthrough-icon" ng-show="icon && icon!='arrow'" ng-src="{{walkthroughIcon}}">
                 <div class="walkthrough-element walkthrough-arrow" ng-show="icon=='arrow'"></div>
-                <button class="walkthrough-element walkthrough-button-positive walkthrough-done-button" type="button" ng-if="useButton" ng-click="onCloseClicked($event)" on-touch="onCloseTouched($event)">
+                <button class="walkthrough-element walkthrough-button-positive {{doneButtonClass}} walkthrough-done-button" type="button" ng-if="useButton" ng-click="onCloseClicked($event)" on-touch="onCloseTouched($event)">
                     {{buttonCaption}}
                 </button>
             </div>

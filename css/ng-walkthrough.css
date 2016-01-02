@@ -40,7 +40,7 @@
     text-align: center;
 }
 
-.walkthrough-element.walkthrough-done-button{
+.walkthrough-element.walkthrough-done-button,.walkthrough-element.walkthrough-done-button.bottom-right{
     position:absolute;
     bottom: 30px;
     height: 30px;
@@ -48,6 +48,24 @@
     display: inline-block;
     right: 30px;
     margin: 0 auto;
+}
+.walkthrough-element.walkthrough-done-button.top-right{
+    top: 30px;
+    right: 30px;
+    bottom: initial;
+    left: initial;
+}
+.walkthrough-element.walkthrough-done-button.top-left{
+    top: 30px;
+    left: 30px;
+    right: initial;
+    bottom: initial;
+}
+.walkthrough-element.walkthrough-done-button.bottom-left{
+    bottom: 30px;
+    left: 30px;
+    right: initial;
+    top: initial;
 }
 
 .walkthrough-button-positive{

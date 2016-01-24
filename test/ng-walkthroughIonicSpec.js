@@ -6,12 +6,8 @@ describe('ionic specific Tests', function() {
     var $timeout;
     var $ionicPosition;
 
-    var scripts = document.getElementsByTagName("script");
-    var currentScriptPath = scripts[scripts.length - 1].src;
-    var templateUrl = currentScriptPath.replace(new RegExp("test\/ng-walkthroughIonicSpec.js.*"), 'ng-walkthrough.html');
-    // Load the myApp module, which contains the directive
     beforeEach(module('ionic'));
-    beforeEach(module('ng-walkthrough', 'ng-walkthrough.html'));
+    beforeEach(module('ng-walkthrough'));
 
     //For the new Jasmine 2.0
     beforeEach(function (done) {
@@ -23,10 +19,6 @@ describe('ionic specific Tests', function() {
     beforeEach(inject(function (_$compile_, _$rootScope_, _$timeout_, _$httpBackend_, $templateCache, _$ionicPosition_) {
         jasmine.getStyleFixtures().fixturesPath = 'base';
         loadStyleFixtures('test/css/ionic.css', 'css/ng-walkthrough.css');
-
-        //assign the template to the expected url called by the directive and put it in the cache
-        var template = $templateCache.get('ng-walkthrough.html');
-        $templateCache.put(templateUrl, template);
 
         $httpBackend = _$httpBackend_;
         $httpBackend.when('GET', new RegExp('/\\.*')).respond(200, {

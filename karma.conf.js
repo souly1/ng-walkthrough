@@ -32,8 +32,8 @@ module.exports = function(config) {
       'bower_components/ionic/release/js/ionic.js',
       'bower_components/ionic/release/js/ionic-angular.js',
       'ng-walkthrough.js',
+      'ng-walkthrough.tap_icons.js',
       'test/**/*.js',
-      'ng-walkthrough.html',
       {pattern: 'icons/**/*.png', watched: false, included: false, served: true},
       {pattern: 'css/*.css', watched: true, served: true, included: false},
       {pattern: 'test/css/*.css', watched: true, served: true, included: false}

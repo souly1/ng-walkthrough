@@ -4,12 +4,9 @@ describe('ng-walkthrough Directive', function() {
     var $scope;
     var $httpBackend;
     var $timeout;
+    var ngWalkthroughTapIcons;
 
-    var scripts = document.getElementsByTagName("script");
-    var currentScriptPath = scripts[scripts.length-1].src;
-    var templateUrl = currentScriptPath.replace(new RegExp("test\/ng-walkthroughSpec.js.*"), 'ng-walkthrough.html');
-    // Load the myApp module, which contains the directive
-    beforeEach(module('ng-walkthrough', 'ng-walkthrough.html'));
+    beforeEach(module('ng-walkthrough'));
 
     //For the new Jasmine 2.0
     beforeEach(function(done) {
@@ -18,13 +15,9 @@ describe('ng-walkthrough Directive', function() {
 
     // Store references to $rootScope and $compile
     // so they are available to all tests in this describe block
-    beforeEach(inject(function(_$compile_, _$rootScope_, _$timeout_, _$httpBackend_, $templateCache){
+    beforeEach(inject(function(_$compile_, _$rootScope_, _$timeout_, _$httpBackend_, _ngWalkthroughTapIcons_){
         jasmine.getStyleFixtures().fixturesPath = 'base';
         loadStyleFixtures('css/ng-walkthrough.css');
-
-        //assign the template to the expected url called by the directive and put it in the cache
-        var template = $templateCache.get('ng-walkthrough.html');
-        $templateCache.put(templateUrl, template);
 
         $httpBackend = _$httpBackend_;
         $httpBackend.when('GET', new RegExp('/\\.*')).respond(200, {
@@ -36,6 +29,7 @@ describe('ng-walkthrough Directive', function() {
         $rootScope = _$rootScope_;
         $scope = $rootScope.$new();
         $timeout = _$timeout_;
+        ngWalkthroughTapIcons = _ngWalkthroughTapIcons_;
     }));
 
     afterEach(function() {
@@ -280,16 +274,16 @@ describe('ng-walkthrough Directive', function() {
         var displayedIcon = angular.element($(walkthroughIconDOM));
 
         //Assert
-        expect((displayedIcon[0].attributes['src'].value).indexOf(expectedImage)).toBeGreaterThan(-1);
+        expect(displayedIcon[0].attributes['src'].value).toBe(expectedImage);
     };
 
     it("Should display icon from 'icons' folder given attribute 'icon' is legal icon name", function(){
-        testIconLoadedWithExpectedImage("single_tap", "/icons/Single_Tap.png");
-        testIconLoadedWithExpectedImage("double_tap", "/icons/Double_Tap.png");
-        testIconLoadedWithExpectedImage("swipe_left", "/icons/Swipe_Left.png");
-        testIconLoadedWithExpectedImage("swipe_right", "/icons/Swipe_Right.png");
-        testIconLoadedWithExpectedImage("swipe_down", "/icons/Swipe_Down.png");
-        testIconLoadedWithExpectedImage("swipe_up", "/icons/Swipe_Up.png");
+        testIconLoadedWithExpectedImage("single_tap", ngWalkthroughTapIcons.single_tap);
+        testIconLoadedWithExpectedImage("double_tap", ngWalkthroughTapIcons.double_tap);
+        testIconLoadedWithExpectedImage("swipe_left", ngWalkthroughTapIcons.swipe_left);
+        testIconLoadedWithExpectedImage("swipe_right", ngWalkthroughTapIcons.swipe_right);
+        testIconLoadedWithExpectedImage("swipe_down", ngWalkthroughTapIcons.swipe_down);
+        testIconLoadedWithExpectedImage("swipe_up", ngWalkthroughTapIcons.swipe_up);
     });
 
     it("Should display icon on focus element given it is set by 'focus-element-id'", function(done){

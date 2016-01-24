@@ -1,6 +1,6 @@
 {
   "name": "ng-walkthrough",
-  "version": "0.3.3",
+  "version": "0.4.1",
   "homepage": "https://github.com/souly1/ng-walkthrough",
   "authors": [
     "Ophir Stern <souly01@gmail.com>"
@@ -46,6 +46,7 @@
     "node_modules",
     "bower_components",
     "screenshots",
+    "icons",
     "test",
     "tests"
   ]

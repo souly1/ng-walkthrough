@@ -27,9 +27,9 @@
 
 .walkthrough-hole {
     position: absolute;
-    -moz-box-shadow: 0 0 0 1997px rgba(0, 0, 0, .8);
-    -webkit-box-shadow: 0 0 0 1997px rgba(0, 0, 0, .8);
-    box-shadow: 0 0 0 1997px rgba(0, 0, 0, .8);
+    -moz-box-shadow: 1px 1px 3px 1997px rgba(0, 0, 0, .8);
+    -webkit-box-shadow: 1px 1px 3px 1997px rgba(0, 0, 0, .8);
+    box-shadow: 1px 1px 3px 1997px rgba(0, 0, 0, .8);
     -webkit-appearance: none;
 }
 

@@ -70,6 +70,7 @@ angular.module('ng-walkthrough', [])
                 useButton: '=',
                 iconPaddingLeft: '@',
                 iconPaddingTop: '@',
+                extraHeaderTop: '@',
                 /**
                  * @deprecated Since version 0.3.1. Will be deleted in next versions. Use property forceCaptionLocation instead.
                  */
@@ -375,16 +376,19 @@ angular.module('ng-walkthrough', [])
                 };
 
                 //Attempts to highlight the given element ID and set Icon to it if exists, if not use default - right under text
-                var setElementLocations = function(walkthroughIconWanted, focusElementId, iconPaddingLeft, iconPaddingTop){
-                    var focusElement = document.querySelector('#' + focusElementId);
+                var setElementLocations = function(walkthroughIconWanted, focusElementId, iconPaddingLeft, iconPaddingTop, extraHeaderTop){
+                    var focusElement = document.getElementsByClassName(focusElementId)[0];
+                    if(focusElement == undefined)
+                      focusElement = document.querySelector('#' + focusElementId);
                     var angularElement = angular.element(focusElement);
+                    if(extraHeaderTop == undefined)
+                      extraHeaderTop = 0;
                     if (angularElement.length > 0) {
-
                         var offsetCoordinates = getOffsetCoordinates(angularElement);
                         var width = offsetCoordinates.width;
                         var height = offsetCoordinates.height;
                         var left = offsetCoordinates.left;
-                        var top = offsetCoordinates.top;
+                        var top = offsetCoordinates.top - extraHeaderTop;
 
                         setFocus(left, top, width, height);
                         var paddingLeft = parseFloat(iconPaddingLeft);
@@ -425,7 +429,7 @@ angular.module('ng-walkthrough', [])
                 };
 
                 scope.setFocusOnElement = function(focusElementId){
-                    setElementLocations(scope.icon, focusElementId, scope.iconPaddingLeft, scope.iconPaddingTop);
+                    setElementLocations(scope.icon, focusElementId, scope.iconPaddingLeft, scope.iconPaddingTop, scope.extraHeaderTop);
                 };
 
                 var holeElements = element[0].querySelectorAll(DOM_WALKTHROUGH_HOLE_CLASS);

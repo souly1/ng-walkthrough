@@ -13,9 +13,9 @@
   "devDependencies": {
     "showdown": "0.3.1",
     "angular-mocks": "1.4.3",
-    "jquery": "^2.0",
-    "jasmine-core": "^2.1",
-    "jasmine-jquery": "^2.0.6",
+    "jquery": "2.0",
+    "jasmine-core": "2.1",
+    "jasmine-jquery": "2.0.6",
     "angular-touch": "1.4.3",
     "angular-animate": "1.4.3",
     "angular-route": "1.4.3",

@@ -39,7 +39,7 @@ angular.module('ng-walkthrough', [])
                 '<div class="walkthrough-container walkthrough-container-tip" ng-show="walkthroughType==\'tip\'">',
                     '<div class="walkthrough-transclude" ng-transclude></div>',
                     '<div class="walkthrough-inner" ng-class="{\'walkthrough-top\': ((!forceCaptionLocation && !tipLocation) || forceCaptionLocation==\'TOP\' || tipLocation ==\'TOP\'), \'walkthrough-bottom\': (forceCaptionLocation==\'BOTTOM\' || tipLocation ==\'BOTTOM\')}">',
-                        '<img class="walkthrough-element walkthrough-tip-icon-text-box" ng-class="{\'walkthrough-tip-icon-image-front\': tipIconLocation==\'FRONT\', \'walkthrough-tip-icon-image-back\': tipIconLocation==\'BACK\'}" ng-show="icon!=\'arrow\'" ng-src="{{icon}}" alt="icon">',
+                        '<img class="walkthrough-element walkthrough-tip-icon-text-box" ng-class="{\'walkthrough-tip-icon-image-front\': tipIconLocation==\'FRONT\', \'walkthrough-tip-icon-image-back\': tipIconLocation==\'BACK\'}" ng-show="icon!=\'arrow\'" ng-src="{{walkthroughIcon}}" alt="icon">',
                         '<button class="walkthrough-done-button walkthrough-tip-done-button-text-box" type="button" ng-if="useButton" ng-click="onCloseClicked($event)" on-touch="onCloseTouched($event)">',
                             '<img class="walkthrough-tip-button-image-text-box" ng-src="{{closeIcon}}" alt="x">',
                         '</button>',
@@ -346,6 +346,28 @@ angular.module('ng-walkthrough', [])
                     scope.walkthroughIconElement.attr('style', iconLocation);
                 };
 
+                //Check once
+                var getSameAncestor = function(walkthroughElement, focusElement){
+                    var retval = null;
+                    var walkthroughElementParent = element[0].offsetParent;
+                    var focusElementParent = focusElement[0].offsetParent;
+                    var walkthroughAncestorIter = walkthroughElementParent;
+                    var focusElementAncestorIter = focusElementParent;
+
+                    while (walkthroughAncestorIter && !retval){
+                        focusElementAncestorIter = focusElementParent; //reset
+                        while (focusElementAncestorIter && !retval) {
+                            if (focusElementAncestorIter === walkthroughAncestorIter){
+                                retval = walkthroughAncestorIter;
+                            } else{
+                                focusElementAncestorIter = focusElementAncestorIter.offsetParent;
+                            }
+                        }
+                        walkthroughAncestorIter = walkthroughAncestorIter.offsetParent;
+                    }
+                    return retval;
+                };
+
                 var getOffsetCoordinates = function(focusElement){
                     var width;
                     var height;
@@ -363,23 +385,28 @@ angular.module('ng-walkthrough', [])
                         height = focusElement[0].offsetHeight;
                         left = focusElement[0].offsetLeft;
                         top = focusElement[0].offsetTop;
-                        var parent = focusElement[0].offsetParent;
+                        //var parent = focusElement[0].offsetParent;
 
-                        while (parent) {
-                            left = left + parent.offsetLeft;
-                            top = top + parent.offsetTop;
-                            parent = parent.offsetParent;
-                        }
+                        //while (parent) {
+                        //    left = left + parent.offsetLeft;
+                        //    top = top + parent.offsetTop;
+                        //    parent = parent.offsetParent;
+                        //}
+                    }
+                    var sameAncestorForFocusElementAndWalkthrough = getSameAncestor(element, focusElement);
+                    while (sameAncestorForFocusElementAndWalkthrough) {
+                        left = left - sameAncestorForFocusElementAndWalkthrough.offsetLeft;
+                        top = top - sameAncestorForFocusElementAndWalkthrough.offsetTop;
+                        sameAncestorForFocusElementAndWalkthrough = sameAncestorForFocusElementAndWalkthrough.offsetParent;
                     }
                     return { top:top, left: left, height: height, width: width};
                 };
 
                 //Attempts to highlight the given element ID and set Icon to it if exists, if not use default - right under text
                 var setElementLocations = function(walkthroughIconWanted, focusElementId, iconPaddingLeft, iconPaddingTop){
-                    var focusElement = document.querySelector('#' + focusElementId);
-                    var angularElement = angular.element(focusElement);
-                    if (angularElement.length > 0) {
-
+                    var focusElement = (focusElementId)?document.querySelector('#' + focusElementId): null;
+                    var angularElement = (focusElement)?angular.element(focusElement):null;
+                    if (angularElement && angularElement.length > 0) {
                         var offsetCoordinates = getOffsetCoordinates(angularElement);
                         var width = offsetCoordinates.width;
                         var height = offsetCoordinates.height;

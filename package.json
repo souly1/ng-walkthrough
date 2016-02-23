@@ -8,6 +8,7 @@
   "description": "One of the most common design challenges emerging in mobile design is that of 'invitation' - creating an explanation walk through during user first interaction with the app so to engage the customer. Following Theresa Neil's design pattern from Mobile Design Pattern Gallery",
   "dependencies": {},
   "devDependencies": {
+    "jasmine-core": "^2.4.1",
     "karma": "~0.12.0",
     "karma-jasmine": "^0.2.0",
     "karma-chrome-launcher": "^0.1.4",

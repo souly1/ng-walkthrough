@@ -75,6 +75,40 @@ describe('ng-walkthrough Directive', function() {
         expect($scope.isActive).toBe(false);
     });
 
+    it("Should add class 'walkthrough-lock-scroll' to the body when walkthrough is displayed and flag 'is-scroll-disabled' is set", function(){
+        //Arrange
+        setFixtures('<walkthrough' +
+        ' is-active="true"' + 
+        ' is-scroll-disabled="true">' +
+        '</walkthrough>');
+        $compile($("body"))($scope);
+        $scope.$digest();
+
+        //Assert
+        var $body = angular.element(document.body);
+        expect($body.hasClass('walkthrough-lock-scroll')).toBe(true);
+    });
+
+    it("Should remove class 'walkthrough-lock-scroll' from the body when walkthrough is closed/hidden and flag 'is-scroll-disabled' was set", function(){
+        //Arrange
+        setFixtures('<walkthrough' +
+        ' is-active="true"' + 
+        ' is-scroll-disabled="true">' +
+        '</walkthrough>');
+        $compile($("body"))($scope);
+        $scope.$digest();
+
+        var walkthrough = $('.walkthrough-background');
+
+        //Act
+        walkthrough.click();
+        $scope.$digest();
+
+        //Assert
+        var $body = angular.element(document.body);
+        expect($body.hasClass('walkthrough-lock-scroll')).toBe(false);
+    });
+
     it("Should close the walkthrough upon click anywhere when attribute 'use-button' not set to 'true'", function(){
         //Arrange
         setFixtures('<walkthrough' +

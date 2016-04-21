@@ -195,6 +195,40 @@ describe('ng-walkthrough Directive', function() {
         expect(walkthroughFocusedHole[0].offsetWidth).toBe(walkthroughFocusedItem[0].offsetWidth + 2* padding);
     });
 
+    it("Should create highlight/focus on element with the given DOM selector set in attribute 'focus-element-selector'", function(){
+        //Arrange
+        var marginLeft = 50;
+        var width = 150;
+        var marginTop = 50;
+        var height = 150;
+        var padding = 5;
+
+        var walkthroughHole = ".walkthrough-hole";
+        var mockedFocusItemClass = "mockedFocusItemClass";
+        var mockedFocusItemSelector = "div." + mockedFocusItemClass;
+        setFixtures('<walkthrough' +
+        ' is-active="isActive"' +
+        ' walkthrough-type="transparency"' +
+        ' focus-element-selector="' + mockedFocusItemSelector + '">' +
+        '</walkthrough>');
+
+        jasmine.getFixtures().appendSet('<div class="' + mockedFocusItemClass  + '" style="margin-left:' + marginLeft + 'px;width:' + width + 'px;margin-top:' + marginTop + 'px;height:' + height + 'px;display: inline-block;"></div>');
+
+        $compile($("body"))($scope);
+
+        //Act
+        $scope.isActive = true;
+        $timeout.flush();
+        var walkthroughFocusedItem = angular.element($(mockedFocusItemSelector));
+        var walkthroughFocusedHole = angular.element($(walkthroughHole));
+
+        //Assert
+        expect(walkthroughFocusedHole[0].offsetHeight).toBe(walkthroughFocusedItem[0].offsetHeight + 2* padding);
+        expect(walkthroughFocusedHole[0].offsetLeft).toBe(walkthroughFocusedItem[0].offsetLeft - padding);
+        expect(walkthroughFocusedHole[0].offsetTop).toBe(walkthroughFocusedItem[0].offsetTop - padding);
+        expect(walkthroughFocusedHole[0].offsetWidth).toBe(walkthroughFocusedItem[0].offsetWidth + 2* padding);
+    });
+    
     it("Should add glow around highlight/focus element when attribute 'has-glow' set to 'true'", function(){
         //Arrange
         var marginLeft = 50;

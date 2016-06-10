@@ -48,9 +48,9 @@ angular.module('ng-walkthrough', [])
                     '</div>',
                 '</div>',
                 '<!-- Always show as this gives us the gray background -->',
-                '<div ng-show="walkthroughType==\'transparency\' || focusElementId" class="walkthrough-hole" ng-class="{\'walkthrough-hole-round\': isRound}">',
+                '<div ng-show="walkthroughType==\'transparency\' || focusElementId || focusElementSelector" class="walkthrough-hole" ng-class="{\'walkthrough-hole-round\': isRound}">',
                 '</div>',
-                '<div ng-show="hasGlow && focusElementId" class="walkthrough-hole walkthrough-hole-glow" ng-class="{\'walkthrough-hole-round\': isRound}">',
+                '<div ng-show="hasGlow && (focusElementId || focusElementSelector)" class="walkthrough-hole walkthrough-hole-glow" ng-class="{\'walkthrough-hole-round\': isRound}">',
                 '</div>',
             '</div>'
         ].join('');
@@ -62,22 +62,25 @@ angular.module('ng-walkthrough', [])
                 walkthroughType: '@',
                 isActive: '=',
                 icon: '@',
-                focusElementId: '@',
-                focusElementSelector: '@',
-                mainCaption: '@',
-                forceCaptionLocation: '@',
-                isRound: '=',
-                hasGlow: '=',
-                useButton: '=',
-                iconPaddingLeft: '@',
-                iconPaddingTop: '@',
+                /**
+                 * @deprecated Since version 0.4.3. Will be deleted in next versions. Use property focusElementSelector instead.
+                 */
+                focusElementId: '@?',
+                focusElementSelector: '@?',
+                mainCaption: '@?',
+                forceCaptionLocation: '@?',
+                isRound: '=?',
+                hasGlow: '=?',
+                useButton: '=?',
+                iconPaddingLeft: '@?',
+                iconPaddingTop: '@?',
                 /**
                  * @deprecated Since version 0.3.1. Will be deleted in next versions. Use property forceCaptionLocation instead.
                  */
-                tipLocation: '@',
-                tipIconLocation: '@',
-                tipColor: '@',
-                isBindClickEventToBody: '=',
+                tipLocation: '@?',
+                tipIconLocation: '@?',
+                tipColor: '@?',
+                isBindClickEventToBody: '=?',
                 onWalkthroughShow: '&',
                 onWalkthroughHide: '&'
             },
@@ -389,8 +392,8 @@ angular.module('ng-walkthrough', [])
                     } else {
                         width = focusElement[0].offsetWidth;
                         height = focusElement[0].offsetHeight;
-                        left = focusElement[0].offsetLeft;
-                        top = focusElement[0].offsetTop;
+                        left = focusElement[0].getBoundingClientRect().left;
+                        top = focusElement[0].getBoundingClientRect().top;
                         //var parent = focusElement[0].offsetParent;
 
                         //while (parent) {
@@ -410,7 +413,16 @@ angular.module('ng-walkthrough', [])
 
                 //Attempts to highlight the given element ID and set Icon to it if exists, if not use default - right under text
                 var setElementLocations = function(walkthroughIconWanted, focusElementSelector, iconPaddingLeft, iconPaddingTop){
-                    var focusElement = (focusElementSelector)?document.querySelector(focusElementSelector): null;
+                    var focusElement = (focusElementSelector)?document.querySelectorAll(focusElementSelector): null;
+                    if (focusElement && focusElement.length>0) {
+                        if (focusElement.length > 1) {
+                            $log.warn('Multiple items fit selector, displaying first as focus item');
+                        }
+                        focusElement = focusElement[0];
+                    } else{
+                        $log.error('No element found with selector: ' + focusElementSelector);
+                        focusElement = null;
+                    }
                     var angularElement = (focusElement)?angular.element(focusElement):null;
                     if (angularElement && angularElement.length > 0) {
                         var offsetCoordinates = getOffsetCoordinates(angularElement);
@@ -476,6 +488,10 @@ angular.module('ng-walkthrough', [])
                     }
                 });
 
+                var handleFocusElementIdDeprecated = function(){
+                    console.warn("Since version 0.4.3 focusElementId is deprecated and will be deleted in next versions. Use property 'focusElementSelector' instead.");
+                };
+
                 var handleTipLocationDeprecated = function(){
                     console.warn("Since version 0.3.1 tipLocation is deprecated and will be deleted in next versions. Use property 'forceCaptionLocation' instead.");
                     //noinspection JSDeprecatedSymbols
@@ -487,6 +503,11 @@ angular.module('ng-walkthrough', [])
                     handleTipLocationDeprecated();
                 }
 
+                //noinspection JSDeprecatedSymbols
+                if (scope.focusElementId){
+                    handleFocusElementIdDeprecated();
+                }
+
                 scope.$watch('isActive', function(newValue){
                     if(newValue){
                         bindScreenResize();
@@ -495,7 +516,7 @@ angular.module('ng-walkthrough', [])
                         }
                         //if (!scope.hasTransclude){//remarked cause did not focus on search field in recipe select
                         try {
-                                if (attrs.focusElementSelector) {
+                            if (attrs.focusElementSelector) {
                                     scope.setFocusOnElement(attrs.focusElementSelector);
                                 }
                             } catch(e){

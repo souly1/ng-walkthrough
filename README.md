@@ -122,7 +122,7 @@ and use one of the two configurations:
 
 - `is-active` (mandatory) - Any walkthrough type. Bound element controls display the directive. Set 'true' to bound element in order to display.
 - `walkthrough-type` (mandatory) - Any walkthrough type. Specifies what type of walkthrough to display. Currently supported are 'transparency' and 'tip' types
-- `focus-element-id` (optional) - Any walkthrough type. ID of DOM element we want to give focus to, without it all screen will be grayed out
+- `focus-element-selector` (optional) - Any walkthrough type. CSS selector of DOM element we want to give focus to, without it all screen will be grayed out. Throws warning if multiple elements return as results and displays first as selected
 - `is-round` (optional) - Any walkthrough type. Set to 'true' if you want the focused area to be round, otherwise it will be square set to the size of the DOM element
 - `has-glow` (optional) - Any walkthrough type. Set to 'true' if you want the focused area to have a glow around it
 - `icon` (optional) - Any walkthrough type. If set to any of the predefined values ("single_tap", "double_tap", "swipe_down", "swipe_left", "swipe_right", "swipe_up"), in such case the icon will be bound to focus element (if exists), make sure to add 'ng-walkthrough.tap_icons.js' following instructions above. any other icon can be used and will be loaded from supplied folder

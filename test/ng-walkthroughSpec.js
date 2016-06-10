@@ -161,7 +161,7 @@ describe('ng-walkthrough Directive', function() {
         }, 100);
     });
 
-    it("Should create highlight/focus on element with the given DOM id set in attribute 'focus-element-id'", function(){
+    it("Should create highlight/focus on element with the given DOM id set in attribute 'focus-element-selector'", function(){
         //Arrange
         var marginLeft = 50;
         var width = 150;
@@ -174,7 +174,7 @@ describe('ng-walkthrough Directive', function() {
         setFixtures('<walkthrough' +
         ' is-active="isActive"' +
         ' walkthrough-type="transparency"' +
-        ' focus-element-id="' + mockedFocusItemId + '">' +
+        ' focus-element-selector="#' + mockedFocusItemId + '">' +
         '</walkthrough>');
 
         jasmine.getFixtures().appendSet('<div id="' + mockedFocusItemId  + '" style="margin-left:' + marginLeft + 'px;width:' + width + 'px;margin-top:' + marginTop + 'px;height:' + height + 'px;display: inline-block;"></div>');
@@ -243,7 +243,7 @@ describe('ng-walkthrough Directive', function() {
         ' is-active="isActive"' +
         ' has-glow="true"'+
         ' walkthrough-type="transparency"' +
-        ' focus-element-id="' + mockedFocusItemId + '">' +
+        ' focus-element-selector="#' + mockedFocusItemId + '">' +
         '</walkthrough>');
 
         jasmine.getFixtures().appendSet('<div id="' + mockedFocusItemId  + '" style="margin-left:' + marginLeft + 'px;width:' + width + 'px;margin-top:' + marginTop + 'px;height:' + height + 'px;display: inline-block;"></div>');
@@ -275,7 +275,7 @@ describe('ng-walkthrough Directive', function() {
         var mockedFocusItemId = "mockedFocusItem";
         setFixtures('<walkthrough' +
         ' is-active="isActive"' +
-        ' focus-element-id="' + mockedFocusItemId + '"' +
+        ' focus-element-selector="#' + mockedFocusItemId + '"' +
         ' is-round=true>' +
         '</walkthrough>');
 
@@ -320,7 +320,7 @@ describe('ng-walkthrough Directive', function() {
         testIconLoadedWithExpectedImage("swipe_up", ngWalkthroughTapIcons.swipe_up);
     });
 
-    it("Should display icon on focus element given it is set by 'focus-element-id'", function(done){
+    it("Should display icon on focus element given it is set by 'focus-element-selector'", function(done){
         //Arrange
         var iconWanted = "single_tap";
         var walkthroughIconDOM = ".walkthrough-icon";
@@ -333,7 +333,7 @@ describe('ng-walkthrough Directive', function() {
         setFixtures('<walkthrough' +
         ' is-active="isActive"' +
         ' walkthrough-type="transparency"' +
-        ' focus-element-id="' + mockedFocusItemId + '"' +
+        ' focus-element-selector="#' + mockedFocusItemId + '"' +
         ' icon="' + iconWanted + '">' +
         '</walkthrough>');
 
@@ -376,7 +376,7 @@ describe('ng-walkthrough Directive', function() {
         setFixtures('<walkthrough' +
         ' is-active="isActive"' +
         ' walkthrough-type="transparency"' +
-        ' focus-element-id="' + mockedFocusItemId + '"' +
+        ' focus-element-selector="#' + mockedFocusItemId + '"' +
         ' icon-padding-left="' + paddingLeft + '"' +
         ' icon-padding-top="' + paddingTop + '"' +
         ' icon="' + iconWanted + '">' +
@@ -419,7 +419,7 @@ describe('ng-walkthrough Directive', function() {
         setFixtures('<walkthrough' +
         ' is-active="isActive"' +
         ' walkthrough-type="transparency"' +
-        ' focus-element-id="' + mockedFocusItemId + '"' +
+        ' focus-element-selector="#' + mockedFocusItemId + '"' +
         ' icon="' + arrowIcon + '">' +
         '</walkthrough>');
 
@@ -523,7 +523,7 @@ describe('ng-walkthrough Directive', function() {
         setFixtures('<walkthrough' +
         ' is-active="isActive"' +
         ' walkthrough-type="transparency"' +
-        ' focus-element-id="' + mockedFocusItemId + '"' +
+        ' focus-element-selector="#' + mockedFocusItemId + '"' +
         ' main-caption="' + mockedCaption + '"' +
         ' icon="' + iconWanted + '">' +
         '</walkthrough>');
@@ -765,7 +765,7 @@ describe('ng-walkthrough Directive', function() {
         ' id="walkthrough"' +
         ' is-active="isActive"' +
         ' icon="' + iconWanted + '"' +
-        ' focus-element-id="' + mockedFocusItemId + '"' +
+        ' focus-element-selector="#' + mockedFocusItemId + '"' +
         ' walkthrough-type="transparency"' +
         ' main-caption="' + mockedCaption + '">' +
         '</walkthrough>');

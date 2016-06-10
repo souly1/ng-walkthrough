@@ -47,7 +47,7 @@ describe('ionic specific Tests', function() {
         var padding = 5;
         var html =
             '<div ng-view>'+
-                '<walkthrough walkthrough-type="transparency" focus-element-id="' + walkthroughFocusItemDOM + '" icon="single_tap" main-caption="This is some text"' +
+                '<walkthrough walkthrough-type="transparency" focus-element-selector="#' + walkthroughFocusItemDOM + '" icon="single_tap" main-caption="This is some text"' +
                     'is-active="isActive">' +
                 '</walkthrough>' +
                 '<ion-nav-bar class="bar-positive">' +

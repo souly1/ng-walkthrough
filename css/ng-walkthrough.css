@@ -200,3 +200,7 @@
     background-color: #ffffff;
 
 }
+
+.walkthrough-lock-scroll {
+    overflow: hidden;
+}

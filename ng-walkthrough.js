@@ -383,8 +383,8 @@ angular.module('ng-walkthrough', [])
                     } else {
                         width = focusElement[0].offsetWidth;
                         height = focusElement[0].offsetHeight;
-                        left = focusElement[0].offsetLeft;
-                        top = focusElement[0].offsetTop;
+                        left = focusElement[0].getBoundingClientRect().left;
+                        top = focusElement[0].getBoundingClientRect().top;
                         //var parent = focusElement[0].offsetParent;
 
                         //while (parent) {

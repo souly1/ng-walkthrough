@@ -306,25 +306,29 @@ angular.module('ng-walkthrough', [])
                 var setArrowAndText = function(pointSubjectLeft, pointSubjectTop, pointSubjectWidth, pointSubjectHeight, paddingLeft){
                     var offsetCoordinates = getOffsetCoordinates(scope.walkthroughTextElement);
                     var startLeft = offsetCoordinates.left + offsetCoordinates.width /2;
-                    var startTop = offsetCoordinates.top + PADDING_ARROW_START;
+                    var startTop = offsetCoordinates.top + offsetCoordinates.height + PADDING_ARROW_START;
 
                     if (scope.forceCaptionLocation === "TOP"){
                         startTop += offsetCoordinates.height;
                     }
-                    var endTop = 0;
                     var endLeft = 0;
 
                     if (startLeft > pointSubjectLeft){//If hole left to text set arrow to point to middle right
                         endLeft = pointSubjectLeft + paddingLeft + pointSubjectWidth;
-                        endTop = pointSubjectTop + (pointSubjectHeight/2);
                     } else if (startLeft < pointSubjectLeft){//If hole right to text set arrow to point to middle left
                         endLeft = pointSubjectLeft - paddingLeft;
-                        endTop = pointSubjectTop + (pointSubjectHeight/2);
                     }
+                    var endTop = pointSubjectTop + (pointSubjectHeight/2);
 
+                    var left,right,top,bottom;
                     //Check if text overlaps icon or user explicitly wants text at bottom, if does, move it to bottom
-                    if (isItemOnText(startLeft, startTop, endLeft, endTop)){
-                        moveTextToBottom(startTop);
+                    left = (startLeft<endLeft)?startLeft:endLeft;
+                    right = (startLeft<endLeft)?endLeft:startLeft;
+                    top = (startTop<endTop)?startTop:endTop;
+                    bottom = (startTop<endTop)?endTop:startTop;
+
+                    if (isItemOnText(left, top, right, bottom)){
+                        moveTextToBottom(top);
                     }
 
                     var arrowSvgDom =

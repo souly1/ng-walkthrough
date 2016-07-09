@@ -86,7 +86,7 @@ and use one of the two configurations:
 <walkthrough
             is-round=true
             walkthrough-type="transparency"
-            focus-element-id="focusItem"
+            focus-element-selector="#focusItem"
             icon="single_tap"
             main-caption="This is some text"
             is-active="isActive"

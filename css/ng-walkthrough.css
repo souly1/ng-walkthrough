@@ -35,7 +35,7 @@
 
 .walkthrough-element.walkthrough-text{
     margin-top: 10%;
-    width: 70%;
+    width: 50%;
     color: #fff;
     text-align: center;
 }
@@ -95,6 +95,7 @@
 
     opacity:1;
     height: 100%;
+    pointer-events: all;
 }
 
 .walkthrough-transclude{
@@ -142,16 +143,16 @@
     width: 100%;
 }
 
-.walkthrough-container-tip > .walkthrough-top, .walkthrough-container-transparency > .walkthrough-top .walkthrough-text-container{
+.walkthrough-container-tip .walkthrough-top, .walkthrough-container-transparency .walkthrough-top {
     top: 15px;
 }
 
-.walkthrough-container-tip > .walkthrough-bottom {
+.walkthrough-container-tip .walkthrough-bottom {
     bottom: 0;
 }
 
 /* take 'done' button into consideration */
-.walkthrough-container-transparency > .walkthrough-bottom .walkthrough-text-container{
+.walkthrough-container-transparency .walkthrough-bottom {
     bottom: 70px;
 }
 

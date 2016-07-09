@@ -33,9 +33,17 @@ describe('ng-walkthrough Directive', function() {
     }));
 
     afterEach(function() {
+        removeWalkthroughElement();
         $httpBackend.verifyNoOutstandingExpectation();
         $httpBackend.verifyNoOutstandingRequest();
     });
+
+    var removeWalkthroughElement = function(){
+        var walkthroughElement = angular.element(document.querySelectorAll('.walkthrough-background'));
+        if (walkthroughElement && walkthroughElement.length > 0) {
+            walkthroughElement.remove();
+        }
+    };
 
     it('Should display the walkthough once display flag set', function(){
         //Arrange
@@ -46,11 +54,14 @@ describe('ng-walkthrough Directive', function() {
         $scope.$digest();
         var walkthrough = $('.walkthrough-background');
 
-        expect(walkthrough).not.toHaveClass('walkthrough-active');
+        expect(walkthrough.length).toBe(0);
 
         //Act
         $scope.isActive = true;
         $scope.$digest();
+        $timeout.flush();
+
+        walkthrough = $('.walkthrough-background');
 
         //Assert
         expect(walkthrough).toHaveClass('walkthrough-active');
@@ -311,12 +322,27 @@ describe('ng-walkthrough Directive', function() {
         expect(displayedIcon[0].attributes['src'].value).toBe(expectedImage);
     };
 
-    it("Should display icon from 'icons' folder given attribute 'icon' is legal icon name", function(){
+    it("Should display single tap icon from 'icons' folder given attribute 'icon' is legal icon name", function(){
         testIconLoadedWithExpectedImage("single_tap", ngWalkthroughTapIcons.single_tap);
+    });
+
+    it("Should display double tap icon from 'icons' folder given attribute 'icon' is legal icon name", function(){
         testIconLoadedWithExpectedImage("double_tap", ngWalkthroughTapIcons.double_tap);
+    });
+
+    it("Should display swipe left icon from 'icons' folder given attribute 'icon' is legal icon name", function(){
         testIconLoadedWithExpectedImage("swipe_left", ngWalkthroughTapIcons.swipe_left);
+    });
+
+    it("Should display swipe right icon from 'icons' folder given attribute 'icon' is legal icon name", function(){
         testIconLoadedWithExpectedImage("swipe_right", ngWalkthroughTapIcons.swipe_right);
+    });
+
+    it("Should display swipe down icon from 'icons' folder given attribute 'icon' is legal icon name", function(){
         testIconLoadedWithExpectedImage("swipe_down", ngWalkthroughTapIcons.swipe_down);
+    });
+
+    it("Should display swipe up icon from 'icons' folder given attribute 'icon' is legal icon name", function(){
         testIconLoadedWithExpectedImage("swipe_up", ngWalkthroughTapIcons.swipe_up);
     });
 
@@ -514,12 +540,12 @@ describe('ng-walkthrough Directive', function() {
         //Arrange
         var iconWanted = "single_tap";
         var walkthroughIconDOM = ".walkthrough-icon";
-        var marginLeft = 50;
+        var marginLeft = 25;//cover text with icon
         var width = 150;
         var marginTop = 20;
-        var height = 150;
+        var height = 70;
         var mockedFocusItemId = "mockedFocusItem";
-        var mockedCaption = "mockedCaption";
+        var mockedCaption = "mockedCaption, a bit long";
         setFixtures('<walkthrough' +
         ' is-active="isActive"' +
         ' walkthrough-type="transparency"' +
@@ -528,22 +554,22 @@ describe('ng-walkthrough Directive', function() {
         ' icon="' + iconWanted + '">' +
         '</walkthrough>');
 
-        jasmine.getFixtures().appendSet('<div id="' + mockedFocusItemId  + '" style="margin-left:' + marginLeft + '%;width:' + width + 'px;margin-top:' + marginTop + 'px;height:' + height + 'px;display: inline-block;"></div>');
+        jasmine.getFixtures().appendSet('<div id="' + mockedFocusItemId  + '" style="margin-left:' + marginLeft + '%;width:' + width + 'px;margin-top:' + marginTop + 'px;height:' + height + 'px;display: inline-block;">Focus On Me</div>');
         $compile($("body"))($scope);
+        $scope.isActive = true;
 
         //Act
-        $scope.isActive = true;
+        $scope.$digest();
         $timeout.flush();
-        $timeout.flush();
+        loadStyleFixtures('css/ng-walkthrough.css');
         var displayedIcon = angular.element($(walkthroughIconDOM));
         var walkthroughCaption = angular.element(".walkthrough-text");
 
 
-
         //Assert
-        //Timeout for  fails in Firefox => Travis
+        //Timeout for fails in Firefox => Travis
         window.setTimeout(function () {
-            expect(displayedIcon[0].offsetTop + displayedIcon[0].offsetHeight).toBeLessThan(walkthroughCaption[0].offsetTop);
+            expect(displayedIcon.offset().top + displayedIcon.height()).toBeLessThan(walkthroughCaption.offset().top);
             done();
         }, 100);
     });
@@ -557,12 +583,13 @@ describe('ng-walkthrough Directive', function() {
         '</walkthrough>');
         $compile($("body"))($scope);
         $scope.$digest();
-        var walkthroughTransclude = $('.walkthrough-transclude > #new-transluded-data');
-        var walkthroughNonTransclude = $('.walkthrough-non-transclude-template');
 
         //Act
         $scope.isActive = true;
         $scope.$digest();
+
+        var walkthroughTransclude = $('.walkthrough-transclude > #new-transluded-data');
+        var walkthroughNonTransclude = $('.walkthrough-non-transclude-template');
 
         //Assert
         expect(walkthroughTransclude).toExist();
@@ -673,7 +700,7 @@ describe('ng-walkthrough Directive', function() {
         $scope.isActive = true;
         $scope.$digest();
 
-        var walkthroughTransparencyTextBox = $('.walkthrough-container-transparency > .walkthrough-bottom .walkthrough-text-container');
+        var walkthroughTransparencyTextBox = $('.walkthrough-container-transparency .walkthrough-bottom');
 
         //Assert
         expect(walkthroughTransparencyTextBox[0]).toExist();
@@ -793,28 +820,5 @@ describe('ng-walkthrough Directive', function() {
         $(window).resize();
         $scope.isMoved = true;
         $scope.$digest();
-    });
-
-    //TODO: Need to implement tests for isBindClickEventToBody attribute
-    xit("Should close walkthrough even when clicking outside it, and should add/remove its event listeners only when it's displayed", function(){
-        //Arrange
-        var mockedCaption = "mockedCaption";
-        var iconWanted = "single_tap";
-        setFixtures('<walkthrough' +
-        ' is-active="isActive"' +
-        ' icon="' + iconWanted + '"' +
-        ' is-bind-click-event-to-body' +
-        ' walkthrough-type="transparency"' +
-        ' main-caption="' + mockedCaption + '">' +
-        '</walkthrough>');
-        $compile($("body"))($scope);
-        $scope.$digest();
-
-        //Act
-        $scope.isActive = true;
-        $scope.$digest();
-
-        //Assert
-        expect(true).toBe(false);
     });
 });

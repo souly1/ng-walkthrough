@@ -821,4 +821,29 @@ describe('ng-walkthrough Directive', function() {
         $scope.isMoved = true;
         $scope.$digest();
     });
+
+    it("should allow HTML in mainCaption when allowHtmlCaption is true", function(done){
+        //Arrange
+        var expectedText = "mocked walk-through text";
+        setFixtures('<walkthrough' +
+        ' is-active="isActive"' +
+        ' walkthrough-type="transparency"' +
+        ' main-caption="{{caption}}"' +
+        ' allow-html-caption="true">' +
+        '</walkthrough>');
+        $compile($("body"))($scope);
+
+        //Act
+        $scope.isActive = true;
+        $scope.caption = "<h2>expectedText</h2>";
+        $scope.$digest();
+        var walkthroughText = $('.walkthrough-text');
+
+        //Assert
+        window.setTimeout(function () {
+            expect(walkthroughText[0].querySelector("h2")).not.toBe(null);
+            expect(walkthroughText[0].querySelector("h2").textContent).toBe(expectedText);
+            done();
+        }, 100);
+    })
 });

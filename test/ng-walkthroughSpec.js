@@ -4,9 +4,11 @@ describe('ng-walkthrough Directive', function() {
     var $scope;
     var $httpBackend;
     var $timeout;
+    var $sce;
     var ngWalkthroughTapIcons;
 
     beforeEach(module('ng-walkthrough'));
+    beforeEach(module('ngSanitize'));
 
     //For the new Jasmine 2.0
     beforeEach(function(done) {
@@ -15,7 +17,7 @@ describe('ng-walkthrough Directive', function() {
 
     // Store references to $rootScope and $compile
     // so they are available to all tests in this describe block
-    beforeEach(inject(function(_$compile_, _$rootScope_, _$timeout_, _$httpBackend_, _ngWalkthroughTapIcons_){
+    beforeEach(inject(function(_$compile_, _$rootScope_, _$timeout_, _$httpBackend_, _ngWalkthroughTapIcons_, _$sce_){
         jasmine.getStyleFixtures().fixturesPath = 'base';
         loadStyleFixtures('css/ng-walkthrough.css');
 
@@ -29,6 +31,7 @@ describe('ng-walkthrough Directive', function() {
         $rootScope = _$rootScope_;
         $scope = $rootScope.$new();
         $timeout = _$timeout_;
+        $sce = _$sce_;
         ngWalkthroughTapIcons = _ngWalkthroughTapIcons_;
     }));
 
@@ -835,7 +838,7 @@ describe('ng-walkthrough Directive', function() {
 
         //Act
         $scope.isActive = true;
-        $scope.caption = "<h2>expectedText</h2>";
+        $scope.caption = $sce.trustAsHtml("<h2>expectedText</h2>");
         $scope.$digest();
         var walkthroughText = $('.walkthrough-text');
 

@@ -838,7 +838,7 @@ describe('ng-walkthrough Directive', function() {
 
         //Act
         $scope.isActive = true;
-        $scope.caption = $sce.trustAsHtml("<h2>expectedText</h2>");
+        $scope.caption = $sce.trustAsHtml("<h2>" + expectedText + "</h2>");
         $scope.$digest();
         var walkthroughText = $('.walkthrough-text');
 

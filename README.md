@@ -120,6 +120,7 @@ and use one of the two configurations:
 
 ## Directive Attributes
 
+- `wid` (optional) - The id to set to the walkthrough when open
 - `is-active` (mandatory) - Any walkthrough type. Bound element controls display the directive. Set 'true' to bound element in order to display.
 - `walkthrough-type` (mandatory) - Any walkthrough type. Specifies what type of walkthrough to display. Currently supported are 'transparency' and 'tip' types
 - `focus-element-selector` (optional) - Any walkthrough type. CSS selector of DOM element we want to give focus to, if value set to empty string "" all screen will be grayed out. Throws warning if multiple elements return as results and displays first as selected

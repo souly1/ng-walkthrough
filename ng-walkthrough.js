@@ -66,6 +66,7 @@ angular.module('ng-walkthrough', [])
                     walkthroughType: '@',
                     isActive: '=',
                     icon: '@',
+                    wid: '@?',
                     focusElementSelector: '@?',
                     mainCaption: '@?',
                     forceCaptionLocation: '@?',
@@ -449,6 +450,9 @@ angular.module('ng-walkthrough', [])
                         angular.element(document.body).append(template);
                         setWalkthroughElements();
                         var walkthroughElement = angular.element(document.querySelectorAll('.' + DOM_WALKTHROUGH_CLASS));
+                        if (scope.wid !== undefined && scope.wid !== null && scope.wid.length>0) {
+                            walkthroughElement.attr('id', scope.wid);
+                        }
                         $compile(walkthroughElement)(scope);
                     };
 

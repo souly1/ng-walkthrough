@@ -27,7 +27,9 @@ angular.module('ng-walkthrough', [])
                 '<div class="'+ DOM_TRANSCLUDE + '"></div>',
                 '<div class="walkthrough-non-transclude-template" ng-show="!hasTransclude">',
                 '<div class="walkthrough-text-container" ng-class="{\'walkthrough-top\': (!forceCaptionLocation || forceCaptionLocation==\'TOP\'), \'walkthrough-bottom\': forceCaptionLocation==\'BOTTOM\'}">',
-                '<pre class="walkthrough-element walkthrough-text" ng-bind="mainCaption">',
+                '<pre class="walkthrough-element walkthrough-text" ng-bind="mainCaption" ng-if="allowHtmlCaption != true">',
+                '</pre>',
+                '<pre class="walkthrough-element walkthrough-text" ng-bind-html="mainCaption" ng-if="allowHtmlCaption">',
                 '</pre>',
                 '</div>',
                 '<img class="walkthrough-element walkthrough-icon" ng-show="icon && icon!=\'arrow\'" ng-src="{{walkthroughIcon}}">',
@@ -45,7 +47,9 @@ angular.module('ng-walkthrough', [])
                 '<img class="walkthrough-tip-button-image-text-box" ng-src="{{closeIcon}}" alt="x">',
                 '</button>',
                 '<div class="walkthrough-element walkthrough-tip-text-box" ng-class="{\'walkthrough-tip-text-box-color-black\': tipColor==\'BLACK\', \'walkthrough-tip-text-box-color-white\': tipColor==\'WHITE\'}">',
-                '<pre ng-bind="mainCaption">',
+                '<pre ng-bind="mainCaption" ng-if="allowHtmlCaption != true">',
+                '</pre>',
+                '<pre ng-bind-html="mainCaption" ng-if="allowHtmlCaption">',
                 '</pre>',
                 '<div class="'+ DOM_TRANSCLUDE + '"></div>',
                 '</div>',
@@ -79,7 +83,8 @@ angular.module('ng-walkthrough', [])
                     tipIconLocation: '@?',
                     tipColor: '@?',
                     onWalkthroughShow: '&',
-                    onWalkthroughHide: '&'
+                    onWalkthroughHide: '&',
+                    allowHtmlCaption: '=?'
                 },
                 link: function (scope, element, attrs, ctrl, $transclude) {
                     var getIcon = function(icon){

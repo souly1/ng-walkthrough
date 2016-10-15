@@ -29,6 +29,7 @@ angular.module('ng-walkthrough', [])
                 '<div class="walkthrough-text-container" ng-class="{\'walkthrough-top\': (!forceCaptionLocation || forceCaptionLocation==\'TOP\'), \'walkthrough-bottom\': forceCaptionLocation==\'BOTTOM\'}">',
                 '<pre class="walkthrough-element walkthrough-text" ng-bind="mainCaption">',
                 '</pre>',
+                '<img ng-if="walkthroughHeroImage" class="walkthrough-element walkthrough-hero-image" ng-src="{{walkthroughHeroImage}}" ng-click="onWalkthroughContentClicked()">',
                 '</div>',
                 '<img class="walkthrough-element walkthrough-icon" ng-show="icon && icon!=\'arrow\'" ng-src="{{walkthroughIcon}}">',
                 '<div class="walkthrough-element walkthrough-arrow" ng-show="icon==\'arrow\'"></div>',
@@ -44,9 +45,10 @@ angular.module('ng-walkthrough', [])
                 '<button class="walkthrough-done-button walkthrough-tip-done-button-text-box" type="button" ng-if="useButton" ng-click="onCloseClicked($event)" on-touch="onCloseTouched($event)">',
                 '<img class="walkthrough-tip-button-image-text-box" ng-src="{{closeIcon}}" alt="x">',
                 '</button>',
-                '<div class="walkthrough-element walkthrough-tip-text-box" ng-class="{\'walkthrough-tip-text-box-color-black\': tipColor==\'BLACK\', \'walkthrough-tip-text-box-color-white\': tipColor==\'WHITE\'}">',
+                '<div class="walkthrough-element walkthrough-tip-text-box" ng-click="onWalkthroughContentClicked()" ng-class="{\'walkthrough-tip-text-box-color-black\': tipColor==\'BLACK\', \'walkthrough-tip-text-box-color-white\': tipColor==\'WHITE\'}">',
                 '<pre ng-bind="mainCaption">',
                 '</pre>',
+                '<img ng-if="walkthroughHeroImage" class="walkthrough-element walkthrough-hero-image" ng-src="{{walkthroughHeroImage}}">',
                 '<div class="'+ DOM_TRANSCLUDE + '"></div>',
                 '</div>',
                 '</div>',
@@ -74,12 +76,14 @@ angular.module('ng-walkthrough', [])
                     hasBackdrop: '=?',
                     hasGlow: '=?',
                     useButton: '=?',
+                    walkthroughHeroImage: '@?',
                     iconPaddingLeft: '@?',
                     iconPaddingTop: '@?',
                     tipIconLocation: '@?',
                     tipColor: '@?',
                     onWalkthroughShow: '&',
-                    onWalkthroughHide: '&'
+                    onWalkthroughHide: '&',
+                    onWalkthroughContentClicked: '&'
                 },
                 link: function (scope, element, attrs, ctrl, $transclude) {
                     var getIcon = function(icon){

@@ -130,6 +130,7 @@ and use one of the two configurations:
 - `icon` (optional) - Any walkthrough type. If set to any of the predefined values ("single_tap", "double_tap", "swipe_down", "swipe_left", "swipe_right", "swipe_up"), in such case the icon will be bound to focus element (if exists), make sure to add 'ng-walkthrough.tap_icons.js' following instructions above. any other icon can be used and will be loaded from supplied folder
 - `main-caption` (optional) - Any walkthrough type. This is the text that will be displayed in the walk-through. Text can be formatted
 - `use-button` (optional) - Any walkthrough type. set to 'true' you want a button displayed that most be clicked in order to close walkthrough, otherwise clicking anywhere while walkthrough displayed will close it
+- `walkthrough-hero-image` (optional) - Any walkthrough type. Image to display in walkthrough rigth below caption text
 - `icon-padding-left` (optional) - Any walkthrough type. Add padding to the icon from the left in percentage
 - `icon-padding-top` (optional) - Any walkthrough type. Add padding to the icon from the top in pixels
 - `tip-icon-location` (optional) - For tip walkthrough. In case there is an overlap between the tip text box and the tip icon you can define here which is on top. Either "FRONT" or "BACK"
@@ -137,6 +138,7 @@ and use one of the two configurations:
 - `tip-color` (optional) - For tip walkthrough. Define the tip textbox background color. Currently supports "BLACK" or "WHITE" values
 - `on-walkthrough-show` (optional) - Any walkthrough type. Bind method to be called when walkthrough is displayed
 - `on-walkthrough-hide` (optional) - Any walkthrough type. Bind method to be called when walkthrough is hidden
+- `on-walkthrough-content-clicked` (optional) - Any walkthrough type. Bind method to be called when walkthrough context or hero image clicked
 
 ## Testing
 

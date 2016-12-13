@@ -127,6 +127,24 @@ describe('ng-walkthrough Directive', function() {
         expect($scope.isActive).toBe(false);
     });
 
+    it("Should create a walkthrough button with the custom label provided", function(){
+      //Arrange
+      setFixtures('<walkthrough' +
+      ' walkthrough-type="transparency"' +
+      ' is-active="isActive"' +
+      ' use-button=true' +
+      ' button-caption="CUSTOM-LABEL">' +
+      '</walkthrough>');
+      $compile($("body"))($scope);
+      $scope.isActive = true;
+      $scope.$digest();
+
+      var walkthroughButton = $('.walkthrough-done-button');
+
+      //Assert
+      expect(walkthroughButton.text()).toEqual("CUSTOM-LABEL");
+    });
+
     it("Should not close the walkthrough upon click anywhere other than close button when attribute 'use-button' set to 'true'", function(){
         //Arrange
         //Arrange

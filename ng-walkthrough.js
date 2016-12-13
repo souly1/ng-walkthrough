@@ -76,6 +76,7 @@ angular.module('ng-walkthrough', [])
                     hasBackdrop: '=?',
                     hasGlow: '=?',
                     useButton: '=?',
+                    buttonCaption: '@?',
                     walkthroughHeroImage: '@?',
                     iconPaddingLeft: '@?',
                     iconPaddingTop: '@?',
@@ -198,7 +199,7 @@ angular.module('ng-walkthrough', [])
                             scope.closeIcon = close_icon;
                         },100);
                         scope.walkthroughIcon = getIcon(scope.icon);
-                        scope.buttonCaption = BUTTON_CAPTION_DONE;
+                        scope.buttonCaption = scope.buttonCaption || BUTTON_CAPTION_DONE;
                         if (scope.hasBackdrop === undefined){
                             scope.hasBackdrop = (scope.walkthroughType !== "tip");
                         }

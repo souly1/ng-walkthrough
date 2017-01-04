@@ -185,6 +185,10 @@
     float: right;
 }
 
+.walkthrough-tip-done-button-no-icon{
+    margin-top: -13px !important;
+}
+
 .walkthrough-tip-button-image-text-box{
     width: 42px;
     height: 42px;

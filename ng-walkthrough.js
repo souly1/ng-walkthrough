@@ -468,6 +468,11 @@ angular.module('ng-walkthrough', [])
                         }
                     };
 
+					scope.$watch('focusElementSelector', function(newValue, oldValue) {
+						if(!oldValue || newValue && oldValue) {
+							scope.setFocusOnElement(attrs.focusElementSelector);
+						}
+					});
                     scope.$watch('isActive', function(newValue){
                         if(newValue){
                             bindScreenResize();

@@ -212,7 +212,9 @@ angular.module('ng-walkthrough', [])
                             "top:" + (top - PADDING_HOLE) + "px;" +
                             "width:" + (width + (2 * PADDING_HOLE)) + "px;" +
                             "height:" + (height + (2 * PADDING_HOLE)) + "px;";
-                        scope.walkthroughHoleElements.attr('style', holeDimensions);
+                        if(scope.walkthroughHoleElements) {
+                            scope.walkthroughHoleElements.attr('style', holeDimensions);
+                        }
                     };
 
                     //Check if given icon covers text

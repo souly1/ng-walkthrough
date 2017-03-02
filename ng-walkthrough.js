@@ -212,7 +212,9 @@ angular.module('ng-walkthrough', [])
                             "top:" + (top - PADDING_HOLE) + "px;" +
                             "width:" + (width + (2 * PADDING_HOLE)) + "px;" +
                             "height:" + (height + (2 * PADDING_HOLE)) + "px;";
-                        scope.walkthroughHoleElements.attr('style', holeDimensions);
+                        if(scope.walkthroughHoleElements) {
+                            scope.walkthroughHoleElements.attr('style', holeDimensions);
+                        }
                     };
 
                     //Check if given icon covers text
@@ -468,6 +470,11 @@ angular.module('ng-walkthrough', [])
                         }
                     };
 
+                    scope.$watch('focusElementSelector', function(newValue, oldValue) {
+                        if((!oldValue || newValue && oldValue) && attrs.focusElementSelector) {
+                            scope.setFocusOnElement(attrs.focusElementSelector);
+                        }
+                    });
                     scope.$watch('isActive', function(newValue){
                         if(newValue){
                             bindScreenResize();

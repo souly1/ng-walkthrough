@@ -117,6 +117,7 @@
     border: 2px solid;
     border-radius: 35px;
     padding: 14px;
+    word-break: break-all !important;
     /*margin-top: 0;*/
     /*margin-bottom: 0;*/
 }
